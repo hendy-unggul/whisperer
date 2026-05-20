@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>TYST — Threat Model</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="/ShareTechMono.woff2" rel="preload" as="font" type="font/woff2" crossorigin">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#040d0a;--bg2:#071210;--bg3:#0a1a14;--c0:#00ff9d;--c1:#00d4ff;--c2:#ffd700;--c5:#ff3b6f;--txt:#b8f0d0;--txt2:#7abf9a;--txt3:#3a6a4a;--dim:#1a3a2a;--mono:'Share Tech Mono',monospace}
@@ -52,7 +52,7 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
   <h1>THREAT MODEL</h1>
   <div class="subtitle">what tyst protects against · and what it does not</div>
 
-  <div class="honest-box">
+<div style="border:1px solid rgba(0,255,157,.25);border-left:3px solid var(--c0);padding:20px 24px;background:rgba(0,255,157,.02);margin-bottom:32px"><div style="color:var(--c0);font-size:10px;letter-spacing:2px;margin-bottom:16px">// ASYMMETRIC DEFENSE MODEL</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px"><div style="background:var(--bg2);padding:14px;border:1px solid var(--dim)"><div style="color:var(--c0);font-size:11px;margin-bottom:6px">MASS SURVEILLANCE</div><div style="color:var(--txt3);font-size:10px;line-height:1.9">Impossible. E2E encryption. Zero logs. Ephemeral data. No identity stored.</div></div><div style="background:var(--bg2);padding:14px;border:1px solid var(--dim)"><div style="color:var(--c2);font-size:11px;margin-bottom:6px">TARGETED ATTACK</div><div style="color:var(--txt3);font-size:10px;line-height:1.9">Expensive. Blast radius = 1 message. Stand-alone design. No session keys.</div></div><div style="background:var(--bg2);padding:14px;border:1px solid var(--dim)"><div style="color:var(--c5);font-size:11px;margin-bottom:6px">LEGAL COERCION</div><div style="color:var(--txt3);font-size:10px;line-height:1.9">Exhausting. Finland jurisdiction. Data gone before process ends. Nothing to produce.</div></div></div><div style="font-size:11px;color:var(--txt3);line-height:1.9">TYST does not claim to be unbreakable. Breaking TYST costs more than the information is worth. This is asymmetric defense — the same principle that makes smaller forces survive against larger adversaries.</div></div>  <div class="honest-box">
     <div class="honest-title">// honest disclaimer</div>
     <div class="honest-text">
       No system is perfect. This document exists because we believe
@@ -60,7 +60,7 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
       before you use it. If our limitations don't match your threat model,
       don't use TYST. Use something better suited to your needs.<br><br>
       We will update this document when our threat model changes.
-      Last updated: <span id="tmDate">2026-05-08</span>
+      Last updated: <span id="tmDate">2026-05-20</span>
     </div>
   </div>
 
@@ -105,7 +105,7 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
       <span class="item-icon ok">✓</span>
       <div class="item-content">
         <div class="item-title ok">legal compulsion — content</div>
-        <div class="item-desc">If legally compelled to hand over message content, we cannot. We hold only ciphertext. The recipient's private key — which we never have — is required for decryption. Finnish law governs our jurisdiction.</div>
+        <div class="item-desc">If legally compelled to hand over message content, we cannot. We hold only ciphertext. The recipient's private key — which we never have — is required for decryption. Legal coercion is exhausting by design. Finnish jurisdiction: any legal request requires bilateral process minimum 6-18 months. Cleanup runs every 15 minutes. Messages destroyed 5 seconds after reading. Nothing to produce. Finnish law governs.</div>
       </div>
     </div>
   </div>
@@ -130,7 +130,7 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
       <span class="item-icon warn">✗</span>
       <div class="item-content">
         <div class="item-title warn">network-level surveillance</div>
-        <div class="item-desc">TYST does not use onion routing. A network observer can see that you are connecting to tyst.site, even if they cannot read message content. For network-level anonymity, use Tor or a trusted VPN before connecting to TYST.</div>
+        <div class="item-desc">TYST does not use onion routing by default. For full network anonymity, use our Tor hidden service: jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion via Tor Browser. This eliminates network-level metadata entirely.</div>
       </div>
     </div>
     <div class="item">
@@ -151,7 +151,7 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
       <span class="item-icon warn">✗</span>
       <div class="item-content">
         <div class="item-title warn">Third-party infrastructure dependency</div>
-        <div class="item-desc">During our current phase, we use Hetzner Helsinki (Finland) with Pocketbase self-hosted. Finnish jurisdiction. We depend on Hetzner as infrastructure provider — they could theoretically receive legal requests through Finnish courts. Ciphertext only is stored.</div>
+        <div class="item-desc">Hetzner Helsinki, Finland. PocketBase self-hosted. Zero access logs discarded. Finnish jurisdiction. EU GDPR. Outside 5 Eyes. Outside CLOUD Act. Zero external dependencies, all assets self-hosted. Tor hidden service available. Ciphertext only, ephemeral.</div>
       </div>
     </div>
     <div class="item">

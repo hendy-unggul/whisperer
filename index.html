@@ -839,7 +839,7 @@ const INBOX=(()=>{
         const tok=localStorage.getItem(K.a)||'';if(!tok)return;
         try{
             const r=await fetch('/api/whisper?username='+encodeURIComponent(ME),{headers:{'Authorization':'Bearer '+tok}});
-            if(r.status===401||r.status===403){toast('Session expired. Please sign in again.');return;}
+            if(r.status===401||r.status===403){clearInterval(pt);localStorage.removeItem('tyst_logged_in');localStorage.removeItem('tyst_auth_v1');toast('Session expired. Please sign in again.');setTimeout(()=>window.location.reload(),2000);return;}
             if(!r.ok)return;
             const raw=await r.json();
             if(!Array.isArray(raw)||!raw.length){msgs=[];render();badge(false);return;}

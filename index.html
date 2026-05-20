@@ -1038,12 +1038,6 @@ async function tystSend(){
     const isGuest = localStorage.getItem('tyst_logged_in') !== 'true';
     const userTier = parseInt(localStorage.getItem('tyst_tier')||'0');
     if(!isGuest&&userTier===0&&!isTrial()){openLoginModal();const hint=document.getElementById('guestHint');if(hint){hint.textContent='// 21-day trial ended · upgrade to Tier 1 · send to tyst.pay';hint.style.color='var(--c3)';}return;}
-    if(!isGuest && userTier === 0){
-      openLoginModal();
-      const hint = document.getElementById('guestHint');
-      if(hint){hint.textContent='// upgrade to Tier 1 to send notes · tyst.pay';hint.style.color='var(--c3)';}
-      return;
-    }
     if(isGuest){
       openLoginModal();
       const hint = document.getElementById('guestHint');

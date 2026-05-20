@@ -962,7 +962,9 @@ window.addEventListener('load',()=>{
     }
     if(!IS_GUEST){
         const _t=parseInt(localStorage.getItem('tyst_tier')||'0');
-        if(_t>=1){ECDH.reg();INBOX.poll();const str=document.getElementById('senderTagRow');if(str)str.style.display='flex';$('inboxBtn').onclick=()=>{INBOX.load();$('inboxPanel').classList.add('show');};}
+        ECDH.reg();INBOX.poll();
+        if(_t>=1||isTrial()){const str=document.getElementById('senderTagRow');if(str)str.style.display='flex';}
+        $('inboxBtn').onclick=()=>{INBOX.load();$('inboxPanel').classList.add('show');};
     }
     $('inboxClose').onclick=()=>$('inboxPanel').classList.remove('show');
     $('readBack').onclick=()=>{INBOX.closeRead();$('inboxPanel').classList.add('show');};
@@ -996,6 +998,7 @@ function tystValidate(){
     const to=(document.getElementById('tystTo').value||'').trim().replace('@','');const msg=(document.getElementById('tystMsg').value||'').trim();const ok=/^[a-z0-9_.]{2,24}$/.test(to)&&msg.length>0;const btn=document.getElementById('sendBtn');if(btn)btn.disabled=!ok;}
 function tystChar(){const el=document.getElementById('tystMsg'),c=document.getElementById('charN');if(el&&c)c.textContent=el.value.length;}
 function showHow(){document.getElementById('howOv').classList.add('show');}
+function isTrial(){const cr=localStorage.getItem('tyst_created');if(!cr)return false;const days=(Date.now()-new Date(cr).getTime())/(86400000);return days<21;}
 function showUpgrade(){const el=document.getElementById('upgradeBg');if(el){el.style.display='flex';setTimeout(()=>document.getElementById('upgradeCode').focus(),100);}}
 function closeUpgrade(){const el=document.getElementById('upgradeBg');if(el)el.style.display='none';document.getElementById('upgradeFb').className='lm-fb';document.getElementById('upgradeCode').value='';}
 async function doUpgrade(){
@@ -1034,6 +1037,7 @@ function setStep(n){['ps1','ps2','ps3'].forEach((id,i)=>{const el=document.getEl
 async function tystSend(){
     const isGuest = localStorage.getItem('tyst_logged_in') !== 'true';
     const userTier = parseInt(localStorage.getItem('tyst_tier')||'0');
+    if(!isGuest&&userTier===0&&!isTrial()){openLoginModal();const hint=document.getElementById('guestHint');if(hint){hint.textContent='// 21-day trial ended · upgrade to Tier 1 · send to tyst.pay';hint.style.color='var(--c3)';}return;}
     if(!isGuest && userTier === 0){
       openLoginModal();
       const hint = document.getElementById('guestHint');
@@ -1124,6 +1128,7 @@ async function lmDoLogin(){
         localStorage.setItem(LM.LS.u,user.username);localStorage.setItem(LM.LS.i,user.id);
         localStorage.setItem(LM.LS.l,'true');localStorage.setItem(LM.LS.a,h);
         localStorage.setItem('tyst_tier',user.tier||0);
+        localStorage.setItem('tyst_created',user.created||new Date().toISOString());
         _lfOk();lmFb('lmFbL','s','✓ Signed in!');setTimeout(()=>window.location.reload(),700);
     }catch(err){lmFb('lmFbL','e',err.message||'Sign in failed');btn.disabled=false;btn.textContent='Sign in →';}
 }

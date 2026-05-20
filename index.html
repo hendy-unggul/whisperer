@@ -961,9 +961,8 @@ window.addEventListener('load',()=>{
       });
     }
     if(!IS_GUEST){
-        ECDH.reg();INBOX.poll();
-        const str=document.getElementById('senderTagRow');if(str)str.style.display='flex';
-        $('inboxBtn').onclick=()=>{INBOX.load();$('inboxPanel').classList.add('show');};
+        const _t=parseInt(localStorage.getItem('tyst_tier')||'0');
+        if(_t>=1){ECDH.reg();INBOX.poll();const str=document.getElementById('senderTagRow');if(str)str.style.display='flex';$('inboxBtn').onclick=()=>{INBOX.load();$('inboxPanel').classList.add('show');};}
     }
     $('inboxClose').onclick=()=>$('inboxPanel').classList.remove('show');
     $('readBack').onclick=()=>{INBOX.closeRead();$('inboxPanel').classList.add('show');};
@@ -1068,7 +1067,7 @@ async function tystSend(){
         const payload=includeSender&&ME?'from:'+ME+'|'+msg:msg;
         const enc=await window._ECDH.encrypt(payload,pkd.pubkey);
         await new Promise(r=>setTimeout(r,200));
-        const r=await fetch('/api/whisper',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to,messageEnc:enc})});
+        const _auth=localStorage.getItem('tyst_auth_v1')||'';const r=await fetch('/api/whisper',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+_auth},body:JSON.stringify({to,messageEnc:enc,username:ME||''})});
         if(r.ok||r.status===202){const s=document.getElementById('sentSub');if(s)s.textContent=`No one can retrieve it. It will vanish 5 seconds after ${to} reads it.`;layerShow('lSent');setTimeout(()=>closeProcOv(),3000);}
         else{
         closeProcOv();

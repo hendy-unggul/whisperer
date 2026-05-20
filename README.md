@@ -53,3 +53,33 @@ tyst.site/canary.html - updated monthly
 ## License
 
 MIT
+
+## Security
+
+Responsible disclosure: send findings to tyst.pay via TYST. We review all reports. No formal bounty program yet — formal audit planned.
+
+## Roadmap
+
+**Phase 1 — Current**
+- E2E encryption, ephemeral messages, self-destruct
+- Tor hidden service
+- 21-day trial, free receive forever
+- Manual payment via BCA / USDT TRC-20
+- Warrant canary + threat model
+
+**Phase 2 — Next**
+- PGP-signed canary (pending contact channel)
+- Tier 2 Vault Armour passphrase (4-6 words, multilingual)
+- Monero + BTCPay self-hosted payment
+- Formal security audit (Trail of Bits / Cure53)
+- Bug bounty program
+
+**Phase 3 — Future**
+- Post-quantum hybrid cryptography (ECDH + Kyber)
+- Decentralized relay (trust minimization)
+- Multi-recipient 1-to-1 broadcast
+- iOS / Android native PWA improvements
+
+## Security
+
+Responsible disclosure: send findings to tyst.pay via TYST. We review all reports. No formal bounty program yet — formal audit planned once resources allow.

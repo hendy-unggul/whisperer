@@ -1,0 +1,16 @@
+TYST Warrant Canary
+===================
+Date: 2026-05-20
+Next update due: 2026-06-20
+
+We have NOT received any legal demands.
+We have NOT been compelled to install backdoors.
+We have NOT been subject to any gag orders.
+We have NOT been served any national security letters.
+
+Server: Hetzner Helsinki HEL1, Finland
+Jurisdiction: Finnish law, EU GDPR, outside 5 Eyes
+Tor: jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion
+
+Verify: gpg --verify canary.txt.asc
+PGP Fingerprint: 871B 16E6 AC9C 4D3E 7E9E 9EB6 44A9 91E9 515D 3CBC

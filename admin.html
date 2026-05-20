@@ -276,6 +276,22 @@
     <div id="userList"><div class="loading">loading...</div></div>
   </div>
 
+  <div class="list-section" style="margin:0 32px 24px">
+    <div class="list-hdr">
+      <div class="list-hdr-title">// ACCESS CODE GENERATOR</div>
+    </div>
+    <div style="padding:20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <div>
+        <div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:8px">TIER 1 · SECURE CHANNEL · $3/yr</div>
+        <button onclick="generateCode(1)" style="padding:10px 24px;background:transparent;border:1px solid var(--c0);color:var(--c0);font-family:monospace;font-size:11px;cursor:pointer;letter-spacing:1px">// generate SC code</button>
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:8px">TIER 2 · VAULT ARMOUR · $30/yr</div>
+        <button onclick="generateCode(2)" style="padding:10px 24px;background:var(--c0);border:1px solid var(--c0);color:var(--bg);font-family:monospace;font-size:11px;cursor:pointer;letter-spacing:1px;font-weight:700">// generate VA code</button>
+      </div>
+      <div style="margin-left:auto;font-size:10px;color:var(--txt3)">Code valid 48h · Single use</div>
+    </div>
+  </div>
   <div class="log-section">
     <div class="list-hdr">
       <div class="list-hdr-title">// ACTIVITY LOG</div>
@@ -479,6 +495,21 @@ async function loadRecentUsers() {
   }
 }
 
+function generateCode(tier){
+  const ch='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const s=()=>Array.from({length:4},()=>ch[Math.floor(Math.random()*ch.length)]).join('');
+  const code=(tier===2?'TYST-VA':'TYST-SC')+'-'+s()+'-'+s();
+  const exp=new Date(Date.now()+48*3600000).toISOString();
+  getPBToken().then(token=>{
+    fetch('/api/pb/api/collections/access_codes/records',{
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({code,tier,status:'pending',expires_at:exp})
+    }).then(r=>r.json()).then(d=>{
+      if(d.id){addLog('ok','Code: '+code+' T'+tier);alert('CODE: '+code);}
+      else addLog('err','Failed to generate');
+    });
+  });
+}
 function addLog(type, msg) {
   const time = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
   actLog.unshift({ type, msg, time });

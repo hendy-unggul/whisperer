@@ -1033,8 +1033,14 @@ function toggleProtocol(){
 function hideHow(){document.getElementById('howOv').classList.remove('show');}
 function setStep(n){['ps1','ps2','ps3'].forEach((id,i)=>{const el=document.getElementById(id);if(!el)return;el.className='proc-step';if(i<n)el.classList.add('done');else if(i===n)el.classList.add('act');});}
 async function tystSend(){
-    // TYST-to-TYST: require account to send
     const isGuest = localStorage.getItem('tyst_logged_in') !== 'true';
+    const userTier = parseInt(localStorage.getItem('tyst_tier')||'0');
+    if(!isGuest && userTier === 0){
+      openLoginModal();
+      const hint = document.getElementById('guestHint');
+      if(hint){hint.textContent='// upgrade to Tier 1 to send notes · tyst.pay';hint.style.color='var(--c3)';}
+      return;
+    }
     if(isGuest){
       openLoginModal();
       const hint = document.getElementById('guestHint');
@@ -1118,6 +1124,7 @@ async function lmDoLogin(){
         else if(user.auth_hash!==h){const d=_lfFail();throw new Error('Wrong PIN'+(d>0?' · wait '+d+'s':''));}
         localStorage.setItem(LM.LS.u,user.username);localStorage.setItem(LM.LS.i,user.id);
         localStorage.setItem(LM.LS.l,'true');localStorage.setItem(LM.LS.a,h);
+        localStorage.setItem('tyst_tier',user.tier||0);
         _lfOk();lmFb('lmFbL','s','✓ Signed in!');setTimeout(()=>window.location.reload(),700);
     }catch(err){lmFb('lmFbL','e',err.message||'Sign in failed');btn.disabled=false;btn.textContent='Sign in →';}
 }

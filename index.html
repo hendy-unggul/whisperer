@@ -520,6 +520,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="lm-bg" id="upgradeBg" onclick="if(event.target===this)closeUpgrade()" style="display:none"><div class="lm-card"><div class="lm-top"><div class="lm-wordmark">TYST</div><div class="lm-disc">upgrade tier · enter code from tyst.pay</div></div><div class="lm-body"><button class="lm-x" onclick="closeUpgrade()">&#x2715;</button><div class="lm-title">UPGRADE TIER</div><div style="font-size:10px;color:var(--txt3);margin-bottom:16px;line-height:1.9">1. send payment proof to <span style="color:var(--c0)">tyst.pay</span><br>2. receive access code<br>3. enter code below</div><label class="lm-label">access code</label><input class="lm-input" id="upgradeCode" placeholder="TYST-SC-XXXX-XXXX" autocomplete="off" spellcheck="false" maxlength="20" style="letter-spacing:2px"><div class="lm-fb" id="upgradeFb"></div><button class="lm-btn" onclick="doUpgrade()" style="margin-top:12px"><span>// activate →</span></button></div></div></div>
 
 <!-- LOGIN -->
 <div class="lm-bg" id="lmBg" onclick="if(event.target===this)closeLM()">
@@ -912,6 +913,7 @@ function setupUI(){
         dd.innerHTML=
           '<div class="dd-item" onclick="showQR()">// share TYST</div>'+
           '<div class="dd-item" id="addHomeBtn" onclick="promptAddToHome()">// save to home screen</div>'+
+          '<div class="dd-item" onclick="showUpgrade()">// upgrade tier</div>'+
           '<div class="dd-item" id="loutBtn">Sign out</div>';
         document.querySelector('.app').appendChild(dd);
         const sb=$('sBtn'),sd=$('sDD');
@@ -991,6 +993,25 @@ function tystValidate(){
     const to=(document.getElementById('tystTo').value||'').trim().replace('@','');const msg=(document.getElementById('tystMsg').value||'').trim();const ok=/^[a-z0-9_.]{2,24}$/.test(to)&&msg.length>0;const btn=document.getElementById('sendBtn');if(btn)btn.disabled=!ok;}
 function tystChar(){const el=document.getElementById('tystMsg'),c=document.getElementById('charN');if(el&&c)c.textContent=el.value.length;}
 function showHow(){document.getElementById('howOv').classList.add('show');}
+function showUpgrade(){const el=document.getElementById('upgradeBg');if(el){el.style.display='flex';setTimeout(()=>document.getElementById('upgradeCode').focus(),100);}}
+function closeUpgrade(){const el=document.getElementById('upgradeBg');if(el)el.style.display='none';document.getElementById('upgradeFb').className='lm-fb';document.getElementById('upgradeCode').value='';}
+async function doUpgrade(){
+  const code=(document.getElementById('upgradeCode').value||'').trim().toUpperCase();
+  const fb=document.getElementById('upgradeFb');
+  if(!code){fb.className='lm-fb show e';fb.textContent='Enter access code';return;}
+  const btn=event.target;btn.disabled=true;btn.textContent='Verifying...';
+  try{
+    const cr=await fetch('/api/pb/api/collections/access_codes/records?filter=(code=%27'+encodeURIComponent(code)+'%27%26%26status=%27pending%27)');
+    const cj=await cr.json();const rec=cj.items&&cj.items[0];
+    if(!rec){fb.className='lm-fb show e';fb.textContent='Invalid or already used code';btn.disabled=false;btn.innerHTML='<span>// activate →</span>';return;}
+    if(new Date(rec.expires_at)<new Date()){fb.className='lm-fb show e';fb.textContent='Code expired';btn.disabled=false;btn.innerHTML='<span>// activate →</span>';return;}
+    const auth=localStorage.getItem('tyst_auth_v1');
+    const uid=localStorage.getItem('tyst_uid');
+    await LM.patch('/profiles?id=eq.'+uid,{tier:rec.tier,access_code:code});
+    fb.className='lm-fb show s';fb.textContent='Tier '+rec.tier+' activated!';
+    setTimeout(()=>{closeUpgrade();toast('Tier '+rec.tier+' activated!');},1500);
+  }catch(e){fb.className='lm-fb show e';fb.textContent='Failed: '+e.message;btn.disabled=false;btn.innerHTML='<span>// activate →</span>';}
+}
 function toggleProtocol(){
   var el=document.getElementById("protocolInline");
   var btn=document.getElementById("protocolToggle");

@@ -278,6 +278,25 @@
 
   <div class="list-section" style="margin:0 32px 24px">
     <div class="list-hdr">
+      <div class="list-hdr-title">// MANUAL TIER UPGRADE</div>
+    </div>
+    <div style="padding:20px;display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+      <div>
+        <div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:8px">USERNAME</div>
+        <input id="upgradeUsername" placeholder="word.word" style="padding:10px 14px;background:var(--bg);border:1px solid var(--dim);color:var(--c0);font-family:monospace;font-size:12px;outline:none;width:200px" onkeyup="this.value=this.value.toLowerCase()">
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:8px">TIER</div>
+        <select id="upgradeTier" style="padding:10px 14px;background:var(--bg);border:1px solid var(--dim);color:var(--c0);font-family:monospace;font-size:12px;outline:none">
+          <option value="1">Tier 1 · Secure Channel · $3/yr</option>
+          <option value="2">Tier 2 · Vault Armour · $30/yr</option>
+        </select>
+      </div>
+      <button onclick="manualUpgrade()" style="padding:10px 20px;background:var(--c0);border:none;color:var(--bg);font-family:monospace;font-size:11px;cursor:pointer;font-weight:700;letter-spacing:1px">// upgrade</button>
+    </div>
+  </div>
+  <div class="list-section" style="margin:0 32px 24px">
+    <div class="list-hdr">
       <div class="list-hdr-title">// ACCESS CODE GENERATOR</div>
     </div>
     <div style="padding:20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
@@ -495,6 +514,22 @@ async function loadRecentUsers() {
   }
 }
 
+async function manualUpgrade(){
+  const username=document.getElementById('upgradeUsername').value.trim().toLowerCase();
+  const tier=parseInt(document.getElementById('upgradeTier').value);
+  if(!username){addLog('warn','Enter username');return;}
+  try{
+    const token=await getPBToken();
+    const search=await fetch('/api/pb/api/collections/profiles/records?filter=(username=%27'+encodeURIComponent(username)+'%27)',{headers:{'Authorization':'Bearer '+token}});
+    const sd=await search.json();
+    if(!sd.items||!sd.items.length){addLog('err','User not found: '+username);return;}
+    const uid=sd.items[0].id;
+    const r=await fetch('/api/pb/api/collections/profiles/records/'+uid,{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({tier:tier})});
+    const d=await r.json();
+    if(d.id){addLog('ok','Upgraded '+username+' to Tier '+tier);document.getElementById('upgradeUsername').value='';loadRecentUsers();}
+    else{addLog('err','Upgrade failed: '+JSON.stringify(d));}
+  }catch(e){addLog('err','Error: '+e.message);}
+}
 function generateCode(tier){
   const ch='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   const s=()=>Array.from({length:4},()=>ch[Math.floor(Math.random()*ch.length)]).join('');

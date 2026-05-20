@@ -550,6 +550,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         <label class="lm-label">confirm PIN</label>
         <input class="lm-input lm-pin" id="lmRP2" placeholder="&#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF;" autocomplete="off" maxlength="6" inputmode="numeric">
         <div class="lm-fb" id="lmFbR"></div>
+        <div style="margin:10px 0 4px;font-size:10px;color:var(--txt3);letter-spacing:1px">access code <span style="color:var(--txt3);font-weight:normal">(optional · paid tier)</span></div>
+        <input class="lm-input" id="lmCode" placeholder="TYST-SC-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20" style="letter-spacing:2px;font-size:12px">
         <div class="lm-agree"><input type="checkbox" id="lmAg" onchange="lmUpdateReg()"><label for="lmAg">lost PIN = lost account — <b>PERMANENT</b>, no recovery</label></div>
         <button class="lm-btn" id="lmBtnR" disabled onclick="lmDoReg()" style="margin-top:8px"><span>register &#x2192;</span></button>
         <div class="lm-sw"><button onclick="lmSwitch('login')">already registered? connect</button></div>
@@ -1107,7 +1109,8 @@ async function lmDoReg(){
         const h=await LM.hash(p,u);
         localStorage.setItem(LM.LS.u,user.username);localStorage.setItem(LM.LS.i,user.id);
         localStorage.setItem(LM.LS.l,'true');localStorage.setItem(LM.LS.a,h);
-        await LM.patch('/profiles?id=eq.'+user.id,{auth_hash:h});
+        const ac=(document.getElementById('lmCode')&&document.getElementById('lmCode').value||'').trim().toUpperCase();let td={};if(ac){const cr=await fetch('/api/pb/api/collections/access_codes/records?filter=(code=%27'+encodeURIComponent(ac)+'%27%26%26status=%27pending%27)');const cj=await cr.json();const rec=cj.items&&cj.items[0];if(!rec){lmFb('lmFbR','e','Invalid or used code');btn.disabled=false;btn.innerHTML='<span>register →</span>';return;}if(new Date(rec.expires_at)<new Date()){lmFb('lmFbR','e','Code expired');btn.disabled=false;btn.innerHTML='<span>register →</span>';return;}td={tier:rec.tier,access_code:ac};}
+        await LM.patch('/profiles?id=eq.'+user.id,Object.assign({auth_hash:h},td));
         try{const kp=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveKey','deriveBits']);const pub=await crypto.subtle.exportKey('jwk',kp.publicKey);const priv=await crypto.subtle.exportKey('jwk',kp.privateKey);delete pub.d;localStorage.setItem('tyst_priv_v1',JSON.stringify(priv));localStorage.setItem('tyst_pub_v1',JSON.stringify(pub));sessionStorage.setItem('pk_reg','1');await fetch('/api/pubkey',{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+h},body:JSON.stringify({username:u,pubkey:pub})});}catch(e){console.warn('pubkey reg failed',e);}
         lmFb('lmFbR','s','Account created!');
         setTimeout(()=>{alert('Account created!\n\nUsername: '+user.username+'\n\nSave your PIN — it cannot be recovered.');window.location.reload();},800);

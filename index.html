@@ -1102,9 +1102,7 @@ async function lmDoReg(){
     if(p!==p2){lmFb('lmFbR','e','PINs do not match');return;}
     const btn=document.getElementById('lmBtnR');btn.disabled=true;btn.textContent='Processing…';
     try{
-        console.log('[REG] posting to profiles, username:', u);
         const data=await LM.post('/profiles?select=id,username',{username:u});
-        console.log('[REG] post result:', JSON.stringify(data));
         const user=Array.isArray(data)?data[0]:data;if(!user||!user.id)throw new Error('No data returned');
         const h=await LM.hash(p,u);
         localStorage.setItem(LM.LS.u,user.username);localStorage.setItem(LM.LS.i,user.id);

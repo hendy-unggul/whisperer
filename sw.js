@@ -32,11 +32,6 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Never cache Supabase
-  if (url.hostname.includes('supabase.co')) {
-    e.respondWith(fetch(e.request));
-    return;
-  }
 
   // Static assets — cache first
   e.respondWith(

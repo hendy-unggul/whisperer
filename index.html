@@ -998,7 +998,7 @@ function tystValidate(){
     const to=(document.getElementById('tystTo').value||'').trim().replace('@','');const msg=(document.getElementById('tystMsg').value||'').trim();const ok=/^[a-z0-9_.]{2,24}$/.test(to)&&msg.length>0;const btn=document.getElementById('sendBtn');if(btn)btn.disabled=!ok;}
 function tystChar(){const el=document.getElementById('tystMsg'),c=document.getElementById('charN');if(el&&c)c.textContent=el.value.length;}
 function showHow(){document.getElementById('howOv').classList.add('show');}
-function isTrial(){const cr=localStorage.getItem('tyst_created');if(!cr)return false;const days=(Date.now()-new Date(cr).getTime())/(86400000);return days<21;}
+function isTrial(){const cr=localStorage.getItem('tyst_created');if(!cr)return true;const days=(Date.now()-new Date(cr).getTime())/(86400000);return days<21;}
 function showUpgrade(){const el=document.getElementById('upgradeBg');if(el){el.style.display='flex';setTimeout(()=>document.getElementById('upgradeCode').focus(),100);}}
 function closeUpgrade(){const el=document.getElementById('upgradeBg');if(el)el.style.display='none';document.getElementById('upgradeFb').className='lm-fb';document.getElementById('upgradeCode').value='';}
 async function doUpgrade(){

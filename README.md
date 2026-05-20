@@ -16,6 +16,22 @@ Send end-to-end encrypted notes to a username. Self-destructs 5 seconds after re
 - Padding: 256-byte block boundary
 - Private key: localStorage, device-only, never transmitted
 
+
+## Access model
+
+| Tier | Price | Send | Receive | Notes |
+|---|---|---|---|---|
+| Free (Trial) | Free | Unlimited | Unlimited | First 21 days |
+| Free (Post-trial) | Free | No | Yes, forever | Retain without paying |
+| Tier 1 Secure Channel | $3/yr | Unlimited | Yes | Full access |
+| Tier 2 Vault Armour | $30/yr | Unlimited | Yes | + passphrase (coming) |
+
+Free tier is permanently receive-only after 21-day trial. Paid users can reach free users forever — this is by design. Free receivers become the distribution network for paid senders.
+
+Payment via BCA (Indonesia) or USDT TRC-20. Manual confirmation. No payment processor. No identity required.
+
+To upgrade: send payment proof to tyst.pay via TYST, admin upgrades your tier directly.
+
 ## Asymmetric defense
 
 - Mass surveillance: Impossible

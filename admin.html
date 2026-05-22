@@ -540,7 +540,7 @@ async function manualUpgrade(){
     const sd=await search.json();
     if(!sd.items||!sd.items.length){addLog('err','User not found: '+username);return;}
     const uid=sd.items[0].id;
-    const r=await fetch('/api/pb/api/collections/profiles/records/'+uid,{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({tier:tier})});
+    const r=await fetch('/api/pb/api/collections/profiles/records/'+uid,{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({tier:tier,tier_expires:new Date(Date.now()+365*86400000).toISOString()})});
     const d=await r.json();
     if(d.id){addLog('ok','Upgraded '+username+' to Tier '+tier);document.getElementById('upgradeUsername').value='';loadRecentUsers();}
     else{addLog('err','Upgrade failed: '+JSON.stringify(d));}

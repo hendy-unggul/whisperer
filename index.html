@@ -1179,7 +1179,7 @@ function _lfLoad(){try{const d=JSON.parse(localStorage.getItem('tyst_lf')||'{}')
 function _lfSave(){localStorage.setItem('tyst_lf',JSON.stringify({a:_lf.a,l:_lf.l}));}
 function _lfFail(){_lfLoad();_lf.a++;const t=[0,0,3,10,30,60,120,300,600,1800];const d=t[Math.min(_lf.a,t.length-1)];if(d)_lf.l=Date.now()+d*1000;_lfSave();return d;}
 function _lfOk(){_lf.a=0;_lf.l=0;localStorage.removeItem('tyst_lf');}
-async function isIncognito(){return new Promise(resolve=>{const fs=window.RequestFileSystem||window.webkitRequestFileSystem;if(fs){fs(window.TEMPORARY,100,()=>resolve(false),()=>resolve(true));}else if(navigator.storage&&navigator.storage.estimate){navigator.storage.estimate().then(e=>resolve(e.quota<120000000));}else{resolve(false);}});}
+async function isIncognito(){return new Promise(resolve=>{try{const db=indexedDB.open('_tyst_inc_test');db.onerror=()=>resolve(true);db.onsuccess=e=>{e.target.result.close();indexedDB.deleteDatabase('_tyst_inc_test');resolve(false);};}catch(e){resolve(true);}});}
 async function lmDoLogin(){
   const inc=await isIncognito();if(inc){lmFb("lmFbL","e","incognito not supported. use Tor: jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion");if(confirm("incognito detected. open Tor onion?"))window.open("http://jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion","_blank");return;}
     const u=LM.vu(document.getElementById('lmU').value),p=document.getElementById('lmP').value;

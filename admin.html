@@ -536,7 +536,7 @@ async function loadZombies(){
   try{
     const token=await getPBToken();
     const cutoff=new Date(Date.now()-7*86400000).toISOString();
-    const r=await fetch('/api/pb/api/collections/profiles/records?filter=(tier=0%26%26created<"'+cutoff+'"&&username!="tyst.pay")&perPage=200&sort=-created',{headers:{'Authorization':'Bearer '+token}});
+    const r=await fetch('/api/pb/api/collections/profiles/records?filter=(tier=0%26%26created<%22'+encodeURIComponent(cutoff)+'%22%26%26username!=%22tyst.pay%22)&perPage=200&sort=-created',{headers:{'Authorization':'Bearer '+token}});
     const d=await r.json();
     if(!d.items||!d.items.length){el.innerHTML='// no zombie usernames found';return;}
     el.dataset.count=d.items.length;
@@ -552,7 +552,7 @@ async function deleteZombies(){
   try{
     const token=await getPBToken();
     const cutoff=new Date(Date.now()-7*86400000).toISOString();
-    const r=await fetch('/api/pb/api/collections/profiles/records?filter=(tier=0%26%26created<"'+cutoff+'"&&username!="tyst.pay")&perPage=200',{headers:{'Authorization':'Bearer '+token}});
+    const r=await fetch('/api/pb/api/collections/profiles/records?filter=(tier=0%26%26created<%22'+encodeURIComponent(cutoff)+'%22%26%26username!=%22tyst.pay%22)&perPage=200',{headers:{'Authorization':'Bearer '+token}});
     const d=await r.json();let del=0;
     for(const u of d.items||[]){
       await fetch('/api/pb/api/collections/profiles/records/'+u.id,{method:'DELETE',headers:{'Authorization':'Bearer '+token}});

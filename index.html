@@ -964,7 +964,7 @@ window.addEventListener('load',()=>{
         }
       });
     }
-    const _up=new URLSearchParams(window.location.search);const _uto=_up.get('to');if(_uto&&_uto!==localStorage.getItem('tyst_username')){const _tf=document.getElementById('tystTo');if(_tf){_tf.value=_uto;_tf.readOnly=true;_tf.style.opacity='.6';}window.history.replaceState({},'',window.location.pathname);const _mf=document.getElementById('tystMsg');const _un=localStorage.getItem('tyst_username')||'your.username';if(_mf&&_mf.value===''){_mf.value='Username: @'+_un+'\nAmount: \nDate: \nRef/TxID: ';setTimeout(()=>{const p=11+_un.length;_mf.setSelectionRange(p,p);},200);}}
+    const _up=new URLSearchParams(window.location.search);const _uto=_up.get('to');if(_uto&&_uto!==localStorage.getItem('tyst_username')){const _tf=document.getElementById('tystTo');if(_tf){_tf.value=_uto;_tf.readOnly=true;_tf.style.opacity='.6';}window.history.replaceState({},'',window.location.pathname);const _mf=document.getElementById('tystMsg');const _un=localStorage.getItem('tyst_username')||'your.username';if(_mf&&_mf.value===''){_mf.value='Username: @'+_un+'\nAmount: \nDate: (DD/MM/YY)\nRef/TxID: ';setTimeout(()=>{const p=11+_un.length;_mf.setSelectionRange(p,p);},200);}}
     if(!IS_GUEST){
         const _t=parseInt(localStorage.getItem('tyst_tier')||'0');
         showTrialBanner();

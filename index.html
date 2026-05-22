@@ -874,12 +874,7 @@ const INBOX=(()=>{
       const hasFrom = m.senderUsername && m.senderUsername !== 'anonymous';
       const safeId = esc(m.id);
       const safeSender = hasFrom ? esc(m.senderUsername) : '';
-      const actionBtn = hasFrom
-        ? '<div class="msg-actions">'
-          + '<button onclick="event.stopPropagation();INBOX.muteUser(\'' + safeSender + '\')" title="mute">◌</button>'
-          + '<button onclick="event.stopPropagation();INBOX.blockUser(\'' + safeSender + '\')" title="block">✕</button>'
-          + '</div>'
-        : '';
+      const actionBtn = "";
       const fromLabel = hasFrom ? '@' + safeSender : esc(m.from);
       return '<div class="msg-row" onclick="INBOX.open(\'' + safeId + '\')">'
         + '<div class="msg-meta">'

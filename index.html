@@ -1634,6 +1634,45 @@ if('serviceWorker' in navigator){
   </div>
 
 <script src="/qr.min.js"></script>
+
+<div id="incognitoNotice" style="display:none;position:fixed;inset:0;background:rgba(4,13,10,.95);z-index:9999;align-items:center;justify-content:center;flex-direction:column;padding:30px;text-align:center">
+  <div style="border:1px solid #e53;max-width:420px;padding:30px;background:#040d0a">
+    <div style="color:#e53;font-size:11px;letter-spacing:3px;margin-bottom:16px">// INCOGNITO DETECTED</div>
+    <div style="color:#b8f0d0;font-size:12px;line-height:2;margin-bottom:20px">
+      private key requires persistent storage.<br>
+      incognito mode clears keys on tab close —<br>
+      you will lose access to your inbox.<br><br>
+      <span style="color:#00ff9d">for full privacy, use Tor Browser:</span><br>
+      <span style="color:#00ff9d;font-size:10px;word-break:break-all">jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion</span>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button onclick="document.getElementById('incognitoNotice').style.display='none'" style="background:transparent;border:1px solid #3a6a4a;color:#7abf9a;font-family:inherit;font-size:11px;padding:8px 16px;cursor:pointer;letter-spacing:1px">// continue anyway</button>
+      <button onclick="navigator.clipboard.writeText('jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion')" style="background:transparent;border:1px solid #00ff9d;color:#00ff9d;font-family:inherit;font-size:11px;padding:8px 16px;cursor:pointer;letter-spacing:1px">// copy onion</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var fs = false;
+  try {
+    var t = 'tyst_inc_test';
+    localStorage.setItem(t, '1');
+    localStorage.removeItem(t);
+  } catch(e) { fs = true; }
+  if (!fs) {
+    // Test via storage estimate — incognito has very limited quota
+    if (navigator.storage && navigator.storage.estimate) {
+      navigator.storage.estimate().then(function(est) {
+        if (est.quota && est.quota < 120000000) {
+          document.getElementById('incognitoNotice').style.display = 'flex';
+        }
+      });
+    }
+  } else {
+    document.getElementById('incognitoNotice').style.display = 'flex';
+  }
+})();
+</script>
 </body>
 </html>
 <script>

@@ -1017,7 +1017,9 @@ function showTrialBanner(){
   const cr=localStorage.getItem('tyst_created');
   if(!cr)return;
   const days=Math.floor((Date.now()-new Date(cr).getTime())/86400000);
-  const t=getLang();
+  const _lang=localStorage.getItem('tyst_lang')||'en';
+  const _msgs={en:{d3:'Your trial ends in 3 days. <b>Your inbox stays open - free, forever.</b>',d1:'Last day of full trial. <b>Your inbox remains active forever, free.</b>',d0:'Trial ended. <b>Your inbox is yours forever - free.</b>'},sv:{d3:'Provperiod slutar om 3 dagar. <b>Inkorg gratis for alltid.</b>',d1:'Sista dagen. <b>Inkorg gratis for alltid.</b>',d0:'Provperiod avslutad. <b>Inkorg din for alltid - gratis.</b>'},ru:{d3:'Trial ends in 3 days. <b>Inbox free forever.</b>',d1:'Last trial day. <b>Inbox free forever.</b>',d0:'Trial ended. <b>Inbox free forever.</b>'},es:{d3:'Prueba termina en 3 dias. <b>Bandeja abierta - gratis, para siempre.</b>',d1:'Ultimo dia. <b>Bandeja tuya para siempre, gratis.</b>',d0:'Prueba terminada. <b>Bandeja tuya para siempre - gratis.</b>'},de:{d3:'Test endet in 3 Tagen. <b>Posteingang kostenlos offen.</b>',d1:'Letzter Tag. <b>Posteingang fur immer kostenlos.</b>',d0:'Testphase beendet. <b>Posteingang fur immer kostenlos.</b>'}};
+  const t=_msgs[_lang]||_msgs.en;
   const banner=document.getElementById('trialBanner');
   if(!banner)return;
   const tier=parseInt(localStorage.getItem('tyst_tier')||'0');

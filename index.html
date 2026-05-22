@@ -1013,7 +1013,7 @@ function showTrialBanner(){
   const days=Math.floor((Date.now()-new Date(cr).getTime())/86400000);
   const tier=parseInt(localStorage.getItem('tyst_tier')||'0');
   if(tier>=1)return;
-  const btn=document.querySelector('.dd-item[onclick="showUpgrade()"]');
+  const btn=document.querySelector('.dd-item[onclick="window.location.href=\'/pay\'"]');
   if(!btn)return;
   if(days>=21){
     btn.style.color='var(--c0)';

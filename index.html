@@ -1622,3 +1622,38 @@ if('serviceWorker' in navigator){
 <script src="/qr.min.js"></script>
 </body>
 </html>
+<script>
+// Auto-refresh tier status every 30s
+(function() {
+  const CHECK_INTERVAL = 30000;
+  let lastTier = null;
+
+  async function checkTier() {
+    const username = localStorage.getItem('tyst_username');
+    const authHash = localStorage.getItem('tyst_auth_' + username);
+    if (!username || !authHash) return;
+
+    try {
+      const res = await fetch('/api/profile?username=' + username, {
+        headers: { 'Authorization': 'Bearer ' + authHash }
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      const newTier = data.tier || data.subscription_tier;
+
+      if (lastTier !== null && lastTier !== newTier) {
+        // Tier berubah — reload page
+        window.location.reload();
+      }
+      lastTier = newTier;
+    } catch(e) {}
+  }
+
+  // Start polling setelah login
+  document.addEventListener('tyst:login', () => {
+    lastTier = null;
+    setInterval(checkTier, CHECK_INTERVAL);
+    checkTier();
+  });
+})();
+</script>

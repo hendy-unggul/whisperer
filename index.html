@@ -354,7 +354,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   <header class="hd">
     <div>
       <div class="logo">TYST</div>
-      <div class="logo-sub">SECURE CHANNEL</div>
+      <div class="logo-sub" id="tierLabel">FREE CHANNEL</div>
     </div>
     <div class="hd-r" id="userSection"></div>
   </header>
@@ -968,6 +968,7 @@ window.addEventListener('load',()=>{
     if(!IS_GUEST){
         const _t=parseInt(localStorage.getItem('tyst_tier')||'0');
         const _cl=document.getElementById('chLabel');if(_cl){_cl.textContent=_t>=2?'VAULT CHANNEL':_t>=1?'SECURE CHANNEL':'FREE CHANNEL';}
+        const _tl2=document.getElementById('tierLabel');if(_tl2){_tl2.textContent=_t>=2?'VAULT CHANNEL':_t>=1?'SECURE CHANNEL':'FREE CHANNEL';}
         showTrialBanner();
         ECDH.reg();INBOX.poll();
         if(_t>=1||isTrial()){const str=document.getElementById('senderTagRow');if(str)str.style.display='flex';}

@@ -967,6 +967,7 @@ window.addEventListener('load',()=>{
     const _up=new URLSearchParams(window.location.search);const _uto=_up.get('to');if(_uto&&_uto!==localStorage.getItem('tyst_username')){const _tf=document.getElementById('tystTo');if(_tf){_tf.value=_uto;_tf.readOnly=true;_tf.style.opacity='.6';}window.history.replaceState({},'',window.location.pathname);const _mf=document.getElementById('tystMsg');const _un=localStorage.getItem('tyst_username')||'your.username';if(_mf&&_mf.value===''){_mf.value='Username: @'+_un+'\nAmount: \nDate: (DD/MM/YY)\nRef/TxID: ';setTimeout(()=>{const p=11+_un.length;_mf.setSelectionRange(p,p);},200);}}
     if(!IS_GUEST){
         checkTierExpiry();
+        showRenewalNotice();
         const _t=parseInt(localStorage.getItem('tyst_tier')||'0');
         const _cl=document.getElementById('chLabel');if(_cl){_cl.textContent=_t>=2?'VAULT CHANNEL':_t>=1?'SECURE CHANNEL':'FREE CHANNEL';}
         const _tl2=document.getElementById('tierLabel');if(_tl2){_tl2.textContent=_t>=2?'VAULT CHANNEL':_t>=1?'SECURE CHANNEL':'FREE CHANNEL';}
@@ -1018,6 +1019,25 @@ function checkTierExpiry(){
   }
 }
 function isTrial(){const cr=localStorage.getItem('tyst_created');if(!cr)return true;const days=(Date.now()-new Date(cr).getTime())/(86400000);return days<21;}
+function showRenewalNotice(){
+  const tier=parseInt(localStorage.getItem('tyst_tier')||'0');
+  if(tier===0)return;
+  const exp=localStorage.getItem('tyst_tier_expires');
+  if(!exp)return;
+  const days=Math.floor((new Date(exp)-Date.now())/86400000);
+  const btn=document.querySelector('.dd-item[onclick*="pay"]');
+  if(!btn)return;
+  if(days<=7){
+    btn.style.color='var(--c5)';
+    btn.style.fontWeight='700';
+    btn.style.textShadow='0 0 8px rgba(255,59,111,.6)';
+    btn.textContent='// renew now — '+days+'d left';
+  } else if(days<=30){
+    btn.style.color='var(--c2)';
+    btn.style.textShadow='0 0 4px rgba(255,215,0,.3)';
+    btn.textContent='// renew — '+days+'d left';
+  }
+}
 function showTrialBanner(){
   const _isGuest=localStorage.getItem('tyst_logged_in')!=='true';
   if(_isGuest)return;

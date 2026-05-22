@@ -921,7 +921,7 @@ function setupUI(){
         dd.innerHTML=
           '<div class="dd-item" onclick="showQR()">// share TYST</div>'+
           '<div class="dd-item" id="addHomeBtn" onclick="promptAddToHome()">// save to home screen</div>'+
-          '<div class="dd-item" onclick="window.location.href='/pay'">// upgrade tier</div>'+
+          '<div class="dd-item" onclick="location.href=&quot;/pay&quot;">// upgrade tier</div>'+
           '<div class="dd-item" id="loutBtn">Sign out</div>';
         document.querySelector('.app').appendChild(dd);
         const sb=$('sBtn'),sd=$('sDD');

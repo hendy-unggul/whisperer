@@ -556,8 +556,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         <label class="lm-label">confirm PIN</label>
         <input class="lm-input lm-pin" id="lmRP2" placeholder="&#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF;" autocomplete="off" maxlength="6" inputmode="numeric">
         <div class="lm-fb" id="lmFbR"></div>
-        <div style="margin:10px 0 4px;font-size:10px;color:var(--txt3);letter-spacing:1px">access code <span style="color:var(--txt3);font-weight:normal">(optional · paid tier)</span></div>
-        <input class="lm-input" id="lmCode" placeholder="TYST-SC-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20" style="letter-spacing:2px;font-size:12px">
+
         <div class="lm-agree"><input type="checkbox" id="lmAg" onchange="lmUpdateReg()"><label for="lmAg">lost PIN = lost account — <b>PERMANENT</b>, no recovery</label></div>
         <button class="lm-btn" id="lmBtnR" disabled onclick="lmDoReg()" style="margin-top:8px"><span>register &#x2192;</span></button>
         <div class="lm-sw"><button onclick="lmSwitch('login')">already registered? connect</button></div>

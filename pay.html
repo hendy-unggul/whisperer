@@ -23,7 +23,8 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
 .block-label{font-size:9px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
 .method{margin-bottom:20px}
 .method-title{color:var(--txt2);font-size:11px;letter-spacing:1px;margin-bottom:8px}
-.addr{font-size:11px;color:var(--c0);word-break:break-all;padding:10px;background:var(--bg2);border:1px solid var(--dim);cursor:pointer;letter-spacing:.5px}
+.addr{font-size:11px;color:var(--c0);word-break:break-all;padding:10px 36px 10px 10px;background:var(--bg2);border:1px solid var(--dim);cursor:pointer;letter-spacing:.5px;position:relative}
+.addr::after{content:"⎘";position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--txt3);}
 .addr:hover{border-color:var(--c0)}
 .hint{font-size:9px;color:var(--txt3);margin-top:4px}
 .hint.ok{color:var(--c0)}

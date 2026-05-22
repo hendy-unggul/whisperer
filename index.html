@@ -1012,7 +1012,8 @@ function tystChar(){const el=document.getElementById('tystMsg'),c=document.getEl
 function showHow(){document.getElementById('howOv').classList.add('show');}
 function isTrial(){const cr=localStorage.getItem('tyst_created');if(!cr)return true;const days=(Date.now()-new Date(cr).getTime())/(86400000);return days<21;}
 function showTrialBanner(){
-  if(IS_GUEST)return;
+  const _isGuest=localStorage.getItem("tyst_logged_in")!=="true";
+  if(_isGuest)return;
   const cr=localStorage.getItem('tyst_created');
   if(!cr)return;
   const days=Math.floor((Date.now()-new Date(cr).getTime())/86400000);

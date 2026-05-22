@@ -810,7 +810,7 @@ function initLangSwitcher() {
 (function(){
 'use strict';
 
-const POLL=15000,POLL_INACTIVE=60000,LP='tyst_priv_v1',LPU='tyst_pub_v1';
+const POLL=15000,POLL_INACTIVE=60000,LP=(u)=>'tyst_priv_v1_'+(u||'guest'),LPU=(u)=>'tyst_pub_v1_'+(u||'guest');
 const K={u:'tyst_username',i:'tyst_uid',l:'tyst_logged_in',a:'tyst_auth_v1'};
 const IS_GUEST=localStorage.getItem(K.l)!=='true';
 const _initTier=parseInt(localStorage.getItem('tyst_tier')||'0');
@@ -835,7 +835,7 @@ const ECDH=(()=>{
     function unpad(b){let n=b.length;while(n>0&&b[n-1]===0)n--;return new TextDecoder().decode(b.slice(0,n));}
     async function encrypt(plain,pubJWK){const e=await gen();const rp=await ipub(pubJWK);const k=await aes(e.privateKey,rp);const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},k,pad(plain));return b64(iv)+':'+btoa(JSON.stringify(e.pub))+':'+b64(ct);}
     async function decrypt(enc,privJWK){try{const[iv,ep,ct]=enc.split(':');const eph=await ipub(JSON.parse(atob(ep)));const my=await ipriv(privJWK);const k=await aes(my,eph);const p=await crypto.subtle.decrypt({name:'AES-GCM',iv:fb64(iv)},k,fb64(ct));return unpad(new Uint8Array(p));}catch(e){return '[could not decrypt]';}}
-    async function getOrCreate(){const ps=localStorage.getItem(LP),pu=localStorage.getItem(LPU);if(ps&&pu){try{const p=await ipriv(JSON.parse(ps));return{privateKey:p,priv:JSON.parse(ps),pub:JSON.parse(pu)};}catch(e){}}const kp=await gen();localStorage.setItem(LP,JSON.stringify(kp.priv));localStorage.setItem(LPU,JSON.stringify(kp.pub));return{privateKey:kp.publicKey,priv:kp.priv,pub:kp.pub};}
+    async function getOrCreate(){const _u=localStorage.getItem('tyst_username')||'guest';const ps=localStorage.getItem(LP(_u)),pu=localStorage.getItem(LPU(_u));if(ps&&pu){try{const p=await ipriv(JSON.parse(ps));return{privateKey:p,priv:JSON.parse(ps),pub:JSON.parse(pu)};}catch(e){}}const kp=await gen();localStorage.setItem(LP(_u),JSON.stringify(kp.priv));localStorage.setItem(LPU(_u),JSON.stringify(kp.pub));return{privateKey:kp.publicKey,priv:kp.priv,pub:kp.pub};}
     async function reg(){if(IS_GUEST)return null;const kp=await getOrCreate();if(sessionStorage.getItem('pk_reg')==='1')return kp;try{const r=await fetch('/api/pubkey',{method:'PUT',headers:{'Content-Type':'application/json',...getAuth()},body:JSON.stringify({username:ME,userId:UID,pubkey:kp.pub})});if(r.ok)sessionStorage.setItem('pk_reg','1');}catch(e){}return kp;}
     return{encrypt,decrypt,getOrCreate,reg};
 })();
@@ -1201,7 +1201,7 @@ async function lmDoReg(){
         localStorage.setItem(LM.LS.l,'true');localStorage.setItem(LM.LS.a,h);
         const ac=(document.getElementById('lmCode')&&document.getElementById('lmCode').value||'').trim().toUpperCase();let td={};if(ac){const cr=await fetch('/api/pb/api/collections/access_codes/records?filter=(code=%27'+encodeURIComponent(ac)+'%27%26%26status=%27pending%27)');const cj=await cr.json();const rec=cj.items&&cj.items[0];if(!rec){lmFb('lmFbR','e','Invalid or used code');btn.disabled=false;btn.innerHTML='<span>register →</span>';return;}if(new Date(rec.expires_at)<new Date()){lmFb('lmFbR','e','Code expired');btn.disabled=false;btn.innerHTML='<span>register →</span>';return;}td={tier:rec.tier,access_code:ac};}
         await LM.patch('/profiles?id=eq.'+user.id,Object.assign({auth_hash:h},td));
-        try{const kp=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveKey','deriveBits']);const pub=await crypto.subtle.exportKey('jwk',kp.publicKey);const priv=await crypto.subtle.exportKey('jwk',kp.privateKey);delete pub.d;localStorage.setItem('tyst_priv_v1',JSON.stringify(priv));localStorage.setItem('tyst_pub_v1',JSON.stringify(pub));sessionStorage.setItem('pk_reg','1');await fetch('/api/pubkey',{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+h},body:JSON.stringify({username:u,pubkey:pub})});}catch(e){console.warn('pubkey reg failed',e);}
+        try{const kp=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveKey','deriveBits']);const pub=await crypto.subtle.exportKey('jwk',kp.publicKey);const priv=await crypto.subtle.exportKey('jwk',kp.privateKey);delete pub.d;localStorage.setItem('tyst_priv_v1_'+u,JSON.stringify(priv));localStorage.setItem('tyst_pub_v1_'+u,JSON.stringify(pub));sessionStorage.setItem('pk_reg','1');await fetch('/api/pubkey',{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+h},body:JSON.stringify({username:u,pubkey:pub})});}catch(e){console.warn('pubkey reg failed',e);}
         lmFb('lmFbR','s','Account created!');
         setTimeout(()=>{alert('Account created!\n\nUsername: '+user.username+'\n\nSave your PIN — it cannot be recovered.');window.location.reload();},800);
     }catch(err){

@@ -813,6 +813,8 @@ function initLangSwitcher() {
 const POLL=15000,POLL_INACTIVE=60000,LP='tyst_priv_v1',LPU='tyst_pub_v1';
 const K={u:'tyst_username',i:'tyst_uid',l:'tyst_logged_in',a:'tyst_auth_v1'};
 const IS_GUEST=localStorage.getItem(K.l)!=='true';
+const _initTier=parseInt(localStorage.getItem('tyst_tier')||'0');
+document.addEventListener('DOMContentLoaded',()=>{const _cl=document.getElementById('chLabel');if(_cl){_cl.textContent=IS_GUEST?'FREE CHANNEL':_initTier>=2?'VAULT CHANNEL':_initTier>=1?'SECURE CHANNEL':'FREE CHANNEL';}const _tl=document.getElementById('tierLabel');if(_tl){_tl.textContent=IS_GUEST?'FREE CHANNEL':_initTier>=2?'VAULT CHANNEL':_initTier>=1?'SECURE CHANNEL':'FREE CHANNEL';}});
 const ME=IS_GUEST?null:localStorage.getItem(K.u);
 const UID=IS_GUEST?null:localStorage.getItem(K.i);
 const $=id=>document.getElementById(id);

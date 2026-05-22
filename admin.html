@@ -512,6 +512,7 @@ async function loadRecentUsers() {
         <div class="user-name">// <span>${u.username}</span></div>
         <div style="display:flex;align-items:center;gap:16px">
           ${isNew ? '<div class="user-badge">NEW</div>' : ''}
+          <div class="user-badge" style="background:${u.tier>=2?'var(--c2)':u.tier>=1?'var(--c0)':'var(--dim)'};color:${u.tier>=1?'var(--bg)':'var(--txt3)'}">${u.tier>=2?'VAULT':u.tier>=1?'SECURE':'FREE'}</div>
           <div class="user-time">${t}</div>
         </div>
       </div>`;

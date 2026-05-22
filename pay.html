@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TYST — Upgrade</title>
+<style>
+@font-face{font-family:"Share Tech Mono";src:url(/ShareTechMono.woff2) format("woff2");}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#040d0a;--bg2:#071210;--c0:#00ff9d;--dim:#1a3a2a;--txt:#b8f0d0;--txt2:#7abf9a;--txt3:#3a6a4a;--mono:'Share Tech Mono',monospace}
+body{background:var(--bg);color:var(--txt);font-family:var(--mono);font-size:13px;min-height:100svh;padding:40px 20px;line-height:1.9}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,157,.008) 2px,rgba(0,255,157,.008) 4px);pointer-events:none}
+.wrap{max-width:600px;margin:0 auto;position:relative;z-index:1}
+.logo{font-size:11px;color:var(--txt3);letter-spacing:3px;margin-bottom:40px}
+.logo span{color:var(--c0)}
+h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shadow:0 0 20px rgba(0,255,157,.3)}
+.sub{font-size:11px;color:var(--txt3);letter-spacing:2px;margin-bottom:40px}
+.tier{border:1px solid var(--dim);padding:20px;margin-bottom:16px;background:rgba(0,255,157,.02)}
+.tier-name{color:var(--c0);font-size:13px;font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.tier-price{color:var(--txt2);font-size:12px;margin-bottom:12px}
+.tier-feat{font-size:11px;color:var(--txt3);line-height:2}
+.block{border:1px solid var(--dim);padding:20px;margin-bottom:16px}
+.block-label{font-size:9px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.method{margin-bottom:20px}
+.method-title{color:var(--txt2);font-size:11px;letter-spacing:1px;margin-bottom:8px}
+.addr{font-size:11px;color:var(--c0);word-break:break-all;padding:10px;background:var(--bg2);border:1px solid var(--dim);cursor:pointer;letter-spacing:.5px}
+.addr:hover{border-color:var(--c0)}
+.hint{font-size:9px;color:var(--txt3);margin-top:4px}
+.hint.ok{color:var(--c0)}
+.steps{font-size:11px;color:var(--txt3);line-height:2.2;border-left:2px solid var(--dim);padding-left:16px}
+.steps b{color:var(--txt2)}
+.footer{margin-top:40px;font-size:10px;color:var(--txt3)}
+.footer a{color:var(--txt3);text-decoration:none}
+.footer a:hover{color:var(--c0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><span>TYST</span> · tyst.site/pay</div>
+  <h1>UPGRADE</h1>
+  <div class="sub">manual payment · no third party · no identity required</div>
+
+  <div class="tier">
+    <div class="tier-name">// TIER 1 · SECURE CHANNEL</div>
+    <div class="tier-price">$3 / year · ~Rp 48.000 / tahun</div>
+    <div class="tier-feat">· kirim unlimited<br>· terima unlimited<br>· inbox aktif selamanya</div>
+  </div>
+
+  <div class="tier">
+    <div class="tier-name">// TIER 2 · VAULT ARMOUR</div>
+    <div class="tier-price">$30 / year · ~Rp 480.000 / tahun</div>
+    <div class="tier-feat">· semua fitur Tier 1<br>· passphrase protection (coming soon)<br>· priority support</div>
+  </div>
+
+  <div class="block">
+    <div class="block-label">// payment methods</div>
+    <div class="method">
+      <div class="method-title">BCA · Indonesia · IDR</div>
+      <div class="addr" id="bca" onclick="cp('bca','bh')">5406019035</div>
+      <div class="hint" id="bh">click to copy</div>
+      <div style="font-size:10px;color:var(--txt3);margin-top:6px">a.n. Hendy Unggul Wibowo</div>
+    </div>
+    <div class="method">
+      <div class="method-title">USDT · TRC-20 · Crypto</div>
+      <div class="addr" id="usdt" onclick="cp('usdt','uh')">TJGAnrJXR4fs37UCyMJwLb5HXEULDFKcLZ</div>
+      <div class="hint" id="uh">click to copy</div>
+      <div style="font-size:10px;color:var(--txt3);margin-top:6px">TRC-20 only · jangan kirim via network lain</div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-label">// cara upgrade</div>
+    <div class="steps">
+      <b>1.</b> Transfer sesuai tier yang dipilih<br>
+      <b>2.</b> Login ke tyst.site<br>
+      <b>3.</b> Kirim bukti transfer ke <span style="color:var(--c0)">tyst.pay</span> via TYST<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;sertakan: username · jumlah · tanggal · referensi<br>
+      <b>4.</b> Admin upgrade tier dalam 24 jam<br>
+      <b>5.</b> Login ulang untuk aktivasi
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="/">← tyst.site</a> &nbsp;·&nbsp;
+    <a href="/threat-model.html">threat model</a> &nbsp;·&nbsp;
+    <a href="/canary.html">warrant canary</a>
+  </div>
+</div>
+<script>
+function cp(id,hint){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    const h=document.getElementById(hint);
+    h.textContent='✓ copied';h.classList.add('ok');
+    setTimeout(()=>{h.textContent='click to copy';h.classList.remove('ok');},2000);
+  });
+}
+</script>
+</body>
+</html>

@@ -25,8 +25,8 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  // Never cache API calls — always fresh
-  if (url.pathname.startsWith('/api/')) {
+  // Never cache API calls or admin — always fresh
+  if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/admin')) {
     e.respondWith(fetch(e.request));
     return;
   }

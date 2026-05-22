@@ -1630,19 +1630,16 @@ if('serviceWorker' in navigator){
 
   async function checkTier() {
     const username = localStorage.getItem('tyst_username');
-    const authHash = localStorage.getItem('tyst_auth_' + username);
-    if (!username || !authHash) return;
+    if (!username) return;
 
     try {
-      const res = await fetch('/api/profile?username=' + username, {
-        headers: { 'Authorization': 'Bearer ' + authHash }
-      });
+      const res = await fetch('/api/pb/api/collections/profiles/records?filter=(username=%27'+encodeURIComponent(username)+'%27)');
       if (!res.ok) return;
       const data = await res.json();
-      const newTier = data.tier || data.subscription_tier;
+      if (!data.items || !data.items.length) return;
+      const newTier = data.items[0].subscription_tier || 0;
 
       if (lastTier !== null && lastTier !== newTier) {
-        // Tier berubah — reload page
         window.location.reload();
       }
       lastTier = newTier;

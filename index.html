@@ -1637,7 +1637,7 @@ if('serviceWorker' in navigator){
       if (!res.ok) return;
       const data = await res.json();
       if (!data.items || !data.items.length) return;
-      const newTier = data.items[0].subscription_tier || 0;
+      const newTier = data.items[0].tier || 0;
 
       if (lastTier !== null && lastTier !== newTier) {
         window.location.reload();

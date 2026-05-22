@@ -173,6 +173,12 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .read-foot span{font-size:9px;color:var(--txt3);letter-spacing:1px;text-transform:uppercase}
 @keyframes burn{0%{opacity:1;filter:brightness(1)}40%{opacity:.8;filter:brightness(2) hue-rotate(40deg)}100%{opacity:0;filter:brightness(4) blur(4px);transform:translateY(-8px)}}
 .burning{animation:burn .6s ease-in forwards}
+.trial-banner{display:none;padding:10px 20px;background:rgba(0,255,157,.06);border-bottom:1px solid rgba(0,255,157,.15);font-size:10px;color:var(--txt2);text-align:center;letter-spacing:.5px}
+.trial-banner b{color:var(--c0)}
+.trial-banner a{color:var(--c0);text-decoration:none;margin-left:12px;font-weight:700}
+.trial-banner{display:none;padding:10px 20px;background:rgba(0,255,157,.06);border-bottom:1px solid rgba(0,255,157,.15);font-size:10px;color:var(--txt2);text-align:center;letter-spacing:.5px}
+.trial-banner b{color:var(--c0)}
+.trial-banner a{color:var(--c0);text-decoration:none;margin-left:12px;font-weight:700}
 
 /* HOW OVERLAY */
 .how-ov{display:none;position:fixed;inset:0;background:rgba(2,8,5,.92);backdrop-filter:blur(4px);z-index:2000;align-items:flex-end;justify-content:center}
@@ -350,6 +356,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 </style>
 </head>
 <body>
+<div id="trialBanner" class="trial-banner"></div>
 <div class="app">
   <header class="hd">
     <div>
@@ -576,6 +583,10 @@ const LANGS = {
     msgPlaceholder:'Write anything…', recipPlaceholder:'target.username',
     trust:'sender identity is unknown to anyone',
     protocol:'protocol ↗', sendBtn:'▶ pass note',
+    trialD3:'Your trial ends in 3 days. Your inbox stays open — free, forever. Sending requires Tier 1.',
+    trialD1:'Last day of full trial. Your inbox remains active forever, free. Upgrade anytime to keep sending.',
+    trialD0:'Trial ended. Your inbox is yours forever — free. To send notes, upgrade to Tier 1.',
+    trialCta:'// upgrade →',
     howRows:[{h:'sender identity is untraceable',p:'messages route through an anonymous relay. the server only sees the relay IP, never yours. even if the server is seized, your identity is not there.'},{h:'server cannot read your message',p:'encryption runs on your device before transmission. your private key never leaves your device — the server holds ciphertext only.'},{h:'timing is randomised',p:'a random 2-47 second delay is injected so timing correlation attacks cannot identify the sender.'},{h:'destroyed after reading',p:'5 seconds after the recipient opens the message it is permanently purged from the server. no backup. no log.'}],
     inboxBtn:'↓ open secure inbox', secureInbox:'◆ secure inbox',
     back:'← back', selfDestruct:'this message will self-destruct',
@@ -962,6 +973,7 @@ window.addEventListener('load',()=>{
     }
     if(!IS_GUEST){
         const _t=parseInt(localStorage.getItem('tyst_tier')||'0');
+        showTrialBanner();
         ECDH.reg();INBOX.poll();
         if(_t>=1||isTrial()){const str=document.getElementById('senderTagRow');if(str)str.style.display='flex';}
         $('inboxBtn').onclick=()=>{INBOX.load();$('inboxPanel').classList.add('show');};
@@ -999,6 +1011,27 @@ function tystValidate(){
 function tystChar(){const el=document.getElementById('tystMsg'),c=document.getElementById('charN');if(el&&c)c.textContent=el.value.length;}
 function showHow(){document.getElementById('howOv').classList.add('show');}
 function isTrial(){const cr=localStorage.getItem('tyst_created');if(!cr)return true;const days=(Date.now()-new Date(cr).getTime())/(86400000);return days<21;}
+function showTrialBanner(){
+  if(IS_GUEST)return;
+  const cr=localStorage.getItem('tyst_created');
+  if(!cr)return;
+  const days=Math.floor((Date.now()-new Date(cr).getTime())/86400000);
+  const t=getLang();
+  const banner=document.getElementById('trialBanner');
+  if(!banner)return;
+  const tier=parseInt(localStorage.getItem('tyst_tier')||'0');
+  if(tier>=1)return;
+  if(days>=18&&days<20){
+    banner.style.display='block';
+    banner.innerHTML=t.trialD3||'Your trial ends in 3 days. <b>Your inbox stays open — free, forever.</b><a href="/pay">// upgrade →</a>';
+  }else if(days===20){
+    banner.style.display='block';
+    banner.innerHTML=t.trialD1||'Last day of full trial. <b>Your inbox remains active forever, free.</b><a href="/pay">// upgrade →</a>';
+  }else if(days>=21){
+    banner.style.display='block';
+    banner.innerHTML=t.trialD0||'Trial ended. <b>Your inbox is yours forever — free.</b><a href="/pay">// upgrade →</a>';
+  }
+}
 function showUpgrade(){const el=document.getElementById('upgradeBg');if(el){el.style.display='flex';setTimeout(()=>document.getElementById('upgradeCode').focus(),100);}}
 function closeUpgrade(){const el=document.getElementById('upgradeBg');if(el)el.style.display='none';document.getElementById('upgradeFb').className='lm-fb';document.getElementById('upgradeCode').value='';}
 async function doUpgrade(){

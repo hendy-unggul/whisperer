@@ -1649,11 +1649,9 @@ if('serviceWorker' in navigator){
     } catch(e) {}
   }
 
-  // Start polling setelah login
-  document.addEventListener('tyst:login', () => {
-    lastTier = null;
+  // Start polling saat page load
+  document.addEventListener('DOMContentLoaded', () => {
     setInterval(checkTier, CHECK_INTERVAL);
-    checkTier();
   });
 })();
 </script>

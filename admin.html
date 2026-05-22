@@ -481,7 +481,7 @@ async function loadBarChart() {
   const counts = await Promise.all(days.map(async (day) => {
     const next = new Date(new Date(day).getTime() + 86400000).toISOString().slice(0, 10);
     const r = await pb(
-      `/api/collections/profiles/records?filter=(created>='${day}'&&created<'${next}')&perPage=1`
+      `/api/collections/profiles/records?filter=(created>='${day}'%26%26created<'${next}')&perPage=1`
     );
     return { day, count: r.totalItems || 0 };
   }));

@@ -1126,6 +1126,20 @@ async function tystSend(){
         await new Promise(r=>setTimeout(r,200));
         const _auth=localStorage.getItem('tyst_auth_v1')||'';const r=await fetch('/api/whisper',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+_auth},body:JSON.stringify({to,messageEnc:enc,username:ME||''})});
         if(r.ok||r.status===202){const s=document.getElementById('sentSub');if(s)s.textContent=`No one can retrieve it. It will vanish 5 seconds after ${to} reads it.`;layerShow('lSent');setTimeout(()=>closeProcOv(),3000);}
+        else if(r.status===429){
+        closeProcOv();
+        const d=await r.json().catch(()=>({}));
+        const msg=d.error||'';
+        if(msg.includes('rcpt')||msg.includes('Rate limit (rcpt)')){
+          toast('// rate limit — max 10 messages/hour to same recipient. excessive sending is flagged as spam.');
+        } else if(msg.includes('Daily')){
+          toast('// daily limit reached. upgrade to Tier 1 for unlimited sending.');
+        } else {
+          toast('// rate limit — too many requests. please slow down.');
+        }
+        const b=document.getElementById('sendBtn');
+        if(b){b.disabled=false;b.innerHTML='<span>▶ pass note</span>';}
+      }
         else{
         closeProcOv();
         toast('Failed. Please try again.');

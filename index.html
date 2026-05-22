@@ -173,12 +173,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .read-foot span{font-size:9px;color:var(--txt3);letter-spacing:1px;text-transform:uppercase}
 @keyframes burn{0%{opacity:1;filter:brightness(1)}40%{opacity:.8;filter:brightness(2) hue-rotate(40deg)}100%{opacity:0;filter:brightness(4) blur(4px);transform:translateY(-8px)}}
 .burning{animation:burn .6s ease-in forwards}
-.trial-banner{display:none;padding:10px 20px;background:rgba(0,255,157,.06);border-bottom:1px solid rgba(0,255,157,.15);font-size:10px;color:var(--txt2);text-align:center;letter-spacing:.5px}
-.trial-banner b{color:var(--c0)}
-.trial-banner a{color:var(--c0);text-decoration:none;margin-left:12px;font-weight:700}
-.trial-banner{display:none;padding:10px 20px;background:rgba(0,255,157,.06);border-bottom:1px solid rgba(0,255,157,.15);font-size:10px;color:var(--txt2);text-align:center;letter-spacing:.5px}
-.trial-banner b{color:var(--c0)}
-.trial-banner a{color:var(--c0);text-decoration:none;margin-left:12px;font-weight:700}
 
 /* HOW OVERLAY */
 .how-ov{display:none;position:fixed;inset:0;background:rgba(2,8,5,.92);backdrop-filter:blur(4px);z-index:2000;align-items:flex-end;justify-content:center}
@@ -356,7 +350,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 </style>
 </head>
 <body>
-<div id="trialBanner" class="trial-banner"></div>
 <div class="app">
   <header class="hd">
     <div>
@@ -1013,27 +1006,22 @@ function tystChar(){const el=document.getElementById('tystMsg'),c=document.getEl
 function showHow(){document.getElementById('howOv').classList.add('show');}
 function isTrial(){const cr=localStorage.getItem('tyst_created');if(!cr)return true;const days=(Date.now()-new Date(cr).getTime())/(86400000);return days<21;}
 function showTrialBanner(){
-  const _isGuest=localStorage.getItem("tyst_logged_in")!=="true";
+  const _isGuest=localStorage.getItem('tyst_logged_in')!=='true';
   if(_isGuest)return;
   const cr=localStorage.getItem('tyst_created');
   if(!cr)return;
   const days=Math.floor((Date.now()-new Date(cr).getTime())/86400000);
-  const _lang=localStorage.getItem('tyst_lang')||'en';
-  const _msgs={en:{d3:'Your trial ends in 3 days. <b>Your inbox stays open - free, forever.</b>',d1:'Last day of full trial. <b>Your inbox remains active forever, free.</b>',d0:'Trial ended. <b>Your inbox is yours forever - free.</b>'},sv:{d3:'Provperiod slutar om 3 dagar. <b>Inkorg gratis for alltid.</b>',d1:'Sista dagen. <b>Inkorg gratis for alltid.</b>',d0:'Provperiod avslutad. <b>Inkorg din for alltid - gratis.</b>'},ru:{d3:'Trial ends in 3 days. <b>Inbox free forever.</b>',d1:'Last trial day. <b>Inbox free forever.</b>',d0:'Trial ended. <b>Inbox free forever.</b>'},es:{d3:'Prueba termina en 3 dias. <b>Bandeja abierta - gratis, para siempre.</b>',d1:'Ultimo dia. <b>Bandeja tuya para siempre, gratis.</b>',d0:'Prueba terminada. <b>Bandeja tuya para siempre - gratis.</b>'},de:{d3:'Test endet in 3 Tagen. <b>Posteingang kostenlos offen.</b>',d1:'Letzter Tag. <b>Posteingang fur immer kostenlos.</b>',d0:'Testphase beendet. <b>Posteingang fur immer kostenlos.</b>'}};
-  const t=_msgs[_lang]||_msgs.en;
-  const banner=document.getElementById('trialBanner');
-  if(!banner)return;
   const tier=parseInt(localStorage.getItem('tyst_tier')||'0');
   if(tier>=1)return;
-  if(days>=18&&days<20){
-    banner.style.display='block';
-    banner.innerHTML=t.trialD3||'Your trial ends in 3 days. <b>Your inbox stays open — free, forever.</b><a href="/pay">// upgrade →</a>';
-  }else if(days===20){
-    banner.style.display='block';
-    banner.innerHTML=t.trialD1||'Last day of full trial. <b>Your inbox remains active forever, free.</b><a href="/pay">// upgrade →</a>';
-  }else if(days>=21){
-    banner.style.display='block';
-    banner.innerHTML=t.trialD0||'Trial ended. <b>Your inbox is yours forever — free.</b><a href="/pay">// upgrade →</a>';
+  const btn=document.querySelector('.dd-item[onclick="showUpgrade()"]');
+  if(!btn)return;
+  if(days>=21){
+    btn.style.color='var(--c0)';
+    btn.style.fontWeight='700';
+    btn.style.textShadow='0 0 8px rgba(0,255,157,.6)';
+  } else if(days>=18){
+    btn.style.color='var(--c0)';
+    btn.style.textShadow='0 0 4px rgba(0,255,157,.3)';
   }
 }
 function showUpgrade(){const el=document.getElementById('upgradeBg');if(el){el.style.display='flex';setTimeout(()=>document.getElementById('upgradeCode').focus(),100);}}

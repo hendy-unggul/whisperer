@@ -318,6 +318,7 @@
       <div style="margin-left:auto;font-size:10px;color:var(--txt3)">Code valid 48h · Single use</div>
     </div>
   </div>
+  <div class="list-section" style="margin:0 32px 24px"><div class="list-hdr"><div class="list-hdr-title">// ZOMBIE USERNAME CLEANUP</div><div class="list-hdr-count"><button onclick="loadZombies()" style="background:none;border:1px solid var(--dim);color:var(--c0);font-family:monospace;font-size:10px;padding:4px 10px;cursor:pointer">// scan</button></div></div><div id="zombieList" style="padding:16px;font-size:11px;color:var(--txt3)">// click scan to detect zombie usernames</div><div style="padding:0 16px 16px;display:flex;gap:10px;align-items:center"><button onclick="deleteZombies()" style="padding:8px 16px;background:transparent;border:1px solid #e53;color:#e53;font-family:monospace;font-size:10px;cursor:pointer;letter-spacing:1px">// delete all zombies</button><span style="font-size:9px;color:var(--txt3)">tier 0 · inactive &gt; 7 days · no whispers</span></div></div>
   <div class="log-section">
     <div class="list-hdr">
       <div class="list-hdr-title">// ACTIVITY LOG</div>
@@ -530,6 +531,37 @@ async function delPayMsg(id){
   }catch(e){addLog('err','Delete failed: '+e.message);}
 }
 async function loadPayInbox(){const el=document.getElementById("payInboxList");el.innerHTML="loading...";try{const token=await getPBToken();const r=await fetch("/api/pb/api/collections/whispers/records?filter=(target_username=%27tyst.pay%27)&sort=-created&perPage=20",{headers:{"Authorization":"Bearer "+token}});const d=await r.json();if(!d.items||!d.items.length){el.innerHTML="// no messages";return;}el.innerHTML=d.items.map(m=>{let body=m.message;try{const p=JSON.parse(body);if(p.plain)body="<b style='color:var(--c0)'>from: "+(p.from||"?")+"></b><br>"+p.plain.replace(/\n/g,"<br>")+"<br><small style='color:var(--txt3)'>"+new Date(p.ts).toLocaleString()+"</small>";}catch(e){}return "<div style='padding:12px;border-bottom:1px solid var(--dim);line-height:1.8;position:relative'>"+body+"<br><button onclick='delPayMsg(\""+m.id+"\")' style='margin-top:8px;background:none;border:1px solid var(--dim);color:var(--txt3);font-family:monospace;font-size:9px;padding:3px 8px;cursor:pointer'>// delete</button></div>";}).join("");}catch(e){el.innerHTML="error: "+e.message;}}
+async function loadZombies(){
+  const el=document.getElementById('zombieList');el.innerHTML='scanning...';
+  try{
+    const token=await getPBToken();
+    const cutoff=new Date(Date.now()-7*86400000).toISOString();
+    const r=await fetch('/api/pb/api/collections/profiles/records?filter=(tier=0%26%26created<"'+cutoff+'"&&username!="tyst.pay")&perPage=200&sort=-created',{headers:{'Authorization':'Bearer '+token}});
+    const d=await r.json();
+    if(!d.items||!d.items.length){el.innerHTML='// no zombie usernames found';return;}
+    el.dataset.count=d.items.length;
+    el.innerHTML=d.items.map(u=>'<div style="padding:8px 12px;border-bottom:1px solid var(--dim);display:flex;justify-content:space-between"><span style="color:var(--c0)">'+u.username+'</span><span style="color:var(--txt3);font-size:10px">'+new Date(u.created).toLocaleDateString()+'</span></div>').join('');
+    addLog('warn','Found '+d.items.length+' zombie usernames');
+  }catch(e){el.innerHTML='error: '+e.message;}
+}
+async function deleteZombies(){
+  const el=document.getElementById('zombieList');
+  const count=parseInt(el.dataset.count||0);
+  if(!count){alert('Run scan first');return;}
+  if(!confirm('Delete '+count+' zombies? Cannot be undone.'))return;
+  try{
+    const token=await getPBToken();
+    const cutoff=new Date(Date.now()-7*86400000).toISOString();
+    const r=await fetch('/api/pb/api/collections/profiles/records?filter=(tier=0%26%26created<"'+cutoff+'"&&username!="tyst.pay")&perPage=200',{headers:{'Authorization':'Bearer '+token}});
+    const d=await r.json();let del=0;
+    for(const u of d.items||[]){
+      await fetch('/api/pb/api/collections/profiles/records/'+u.id,{method:'DELETE',headers:{'Authorization':'Bearer '+token}});
+      del++;
+    }
+    el.innerHTML='// deleted '+del+' zombie usernames';el.dataset.count=0;
+    addLog('ok','Deleted '+del+' zombie usernames');
+  }catch(e){el.innerHTML='error: '+e.message;}
+}
 async function manualUpgrade(){
   const username=document.getElementById('upgradeUsername').value.trim().toLowerCase();
   const tier=parseInt(document.getElementById('upgradeTier').value);

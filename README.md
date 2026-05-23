@@ -13,7 +13,7 @@ Send end-to-end encrypted notes to a username. Self-destructs 5 seconds after re
 - Key exchange: ECDH P-256 (ephemeral keypair per message)
 - Encryption: AES-GCM 256-bit (random 12-byte IV)
 - Key derivation: HKDF-SHA256 (info: whisper-v2)
-- Padding: 256-byte block boundary
+- Padding: 256-byte block boundary · random noise fill · 0xff sentinel
 - Private key: localStorage, device-only, never transmitted
 
 
@@ -31,6 +31,12 @@ Free tier is permanently receive-only after 21-day trial. Paid users can reach f
 Payment via BCA (Indonesia) or USDT TRC-20. Manual confirmation. No payment processor. No identity required.
 
 To upgrade: send payment proof to tyst.pay via TYST, admin upgrades your tier directly.
+
+## Security audit
+
+Community security review completed 2026-05-23. Areas reviewed: injection, mass assignment, collection rules, CORS, CSP, timing attack, race condition, credentials, padding, key fingerprint, username enumeration, ownership checks, rate limiting.
+
+Formal third-party audit (Cure53 / Trail of Bits) planned. Do not use for high-stakes communications until complete.
 
 ## Asymmetric defense
 

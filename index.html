@@ -1260,12 +1260,20 @@ function showQR() {
   if(!username) return;
   const dd = document.getElementById('sDD');
   if(dd) dd.classList.remove('show');
-  canvas.innerHTML = '';
+  // QRCode library needs a div, create temp div over canvas
+  const qrWrap = document.getElementById('qrWrap') || (()=>{
+    const d = document.createElement('div');
+    d.id = 'qrWrap';
+    d.style.cssText = 'width:184px;height:184px;margin:0 auto 20px;background:#fff';
+    canvas.parentNode.insertBefore(d, canvas);
+    canvas.style.display = 'none';
+    return d;
+  })();
+  qrWrap.innerHTML = '';
   if(typeof QRCode !== 'undefined') {
-    try {
-      new QRCode(canvas, {text:'https://tyst.site',width:184,height:184,colorDark:'#040d0a',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
-    } catch(e) { canvas.innerHTML = '<p style="color:#e53">QR error</p>'; }
-  } else { canvas.innerHTML = '<p style="color:#e53">QR not loaded</p>'; }
+    try { new QRCode(qrWrap, {text:'https://tyst.site',width:184,height:184,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }
+    catch(e) { qrWrap.innerHTML = '<p style="color:#e53">QR error</p>'; }
+  } else { qrWrap.innerHTML = '<p style="color:#e53">QR not loaded</p>'; }
   panel.classList.add('show');
 }
 

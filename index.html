@@ -107,9 +107,14 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .inbox-badge{background:var(--c5);color:#fff;font-size:9px;padding:2px 7px;display:none;font-family:var(--mono);letter-spacing:1px}
 
 /* PROTOCOL FOOTER */
-.proto{padding:16px 18px;margin-top:auto;border-top:1px solid var(--dim)}
-.proto-txt{font-size:10px;color:var(--txt3);line-height:2.2;letter-spacing:.3px}
-.proto-txt b{color:var(--txt2)}
+.proto{padding:24px 22px 28px;margin-top:auto;border-top:1px solid var(--dim);display:flex;flex-direction:column;gap:20px}
+.proto-block{display:flex;flex-direction:column;gap:6px}
+.proto-label{font-size:9px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px}
+.proto-txt{font-size:12px;color:var(--txt2);line-height:1.8;letter-spacing:.2px}
+.proto-txt b{color:var(--txt);font-weight:400}
+.proto-links{display:flex;gap:24px;flex-wrap:wrap}
+.proto-link{font-size:12px;color:var(--txt3);text-decoration:none;letter-spacing:.5px;transition:color .15s}
+.proto-link:hover{color:var(--c0)}
 
 /* PROCESSING OVERLAY */
 .proc-ov{display:none;position:fixed;inset:0;background:rgba(2,8,5,.92);z-index:1500;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
@@ -450,20 +455,22 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   </section>
 
   <footer class="proto">
-    <div class="proto-txt">
-      <b>enc</b> · ecdh p-256 · aes-gcm 256-bit · hkdf-sha256 &nbsp;|&nbsp;
-      <b>pad</b> · 256-byte blocks &nbsp;|&nbsp;
-      <b>relay</b> · header-stripped · timing-randomised &nbsp;|&nbsp;
-      <b>key</b> · device-only · never transmitted
+    <div class="proto-block">
+      <div class="proto-label">encryption</div>
+      <div class="proto-txt">ecdh p-256 &middot; aes-gcm 256-bit &middot; hkdf-sha256 &middot; 256-byte random padding</div>
+      <div class="proto-txt">key stays on your device &middot; never transmitted &middot; timing randomised 2&ndash;47s</div>
     </div>
-    <div class="proto-txt" style="margin-top:6px;font-size:9px">
-      <b>tor</b> · <a href="http://jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion" style="color:var(--c0);text-decoration:none" target="_blank">jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion</a> &nbsp;|&nbsp;
-      <b>server</b> · helsinki, finland · eu jurisdiction · outside 5 eyes
+    <div class="proto-block">
+      <div class="proto-label">infrastructure</div>
+      <div class="proto-txt">helsinki, finland &middot; eu gdpr &middot; outside 5 eyes &middot; outside cloud act</div>
+      <div class="proto-txt">tor: <a href="http://jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion" class="proto-link" target="_blank">jd34xoogv4b2qawdrxj665zhzvrvf3t2echid5zb4wksas3qsgf3void.onion</a></div>
     </div>
-    <div class="proto-txt" style="margin-top:10px;font-size:10px;display:flex;gap:20px">
-      <a href="/canary.html" style="color:var(--c0);text-decoration:none;font-weight:700;letter-spacing:1px" target="_blank">// warrant canary</a>
-      <a href="/threat-model.html" style="color:var(--c0);text-decoration:none;font-weight:700;letter-spacing:1px" target="_blank">// threat model</a>
-      <a href="https://github.com/tyst-project/tyst" style="color:var(--c0);text-decoration:none;font-weight:700;letter-spacing:1px" target="_blank">// source code</a>
+    <div class="proto-block">
+      <div class="proto-links">
+        <a href="/canary.html" class="proto-link" target="_blank">warrant canary</a>
+        <a href="/threat-model.html" class="proto-link" target="_blank">threat model</a>
+        <a href="https://github.com/tyst-project/tyst" class="proto-link" target="_blank">source code</a>
+      </div>
     </div>
   </footer>
 </div>

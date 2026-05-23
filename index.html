@@ -43,11 +43,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .dd{position:absolute;top:58px;right:18px;background:var(--bg3);border:1px solid var(--dim);z-index:200;min-width:160px;display:none}
 .dd.show{display:block}
 .dd-item{padding:10px 16px;font-family:var(--mono);font-size:11px;color:var(--txt);cursor:pointer;border-bottom:1px solid var(--dim);letter-spacing:.5px;transition:background .1s}
-.dd-item:hover{background:rgba(0,255,157,.05);color:var(--c0)}
+.dd-item:hover{background:rgba(0,255,157,.08);color:var(--c0);padding-left:20px;transition:all .15s}
 
 /* TERMINAL HEADER STRIP */
 .term-strip{padding:10px 22px;border-bottom:1px solid var(--dim);background:var(--bg3);display:flex;align-items:center;font-size:10px;color:var(--txt3);letter-spacing:1px}
-.term-dot{width:5px;height:5px;border-radius:50%;background:var(--c0);animation:blink 2s step-end infinite}
+.term-dot{width:5px;height:5px;border-radius:50%;background:var(--c0);animation:blink 2s step-end infinite;margin-right:10px;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .term-status{color:var(--c0)}
 
@@ -76,7 +76,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .f-label{font-size:10px;color:var(--txt3);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:6px}
 .f-label::before{content:'//';color:var(--dim);font-size:9px}
 .f-input{width:100%;padding:14px 16px;background:var(--bg3);border:1px solid var(--dim);border-left:2px solid var(--c1);color:var(--txt);font-size:13px;font-family:var(--mono);outline:none;transition:all .15s;-webkit-appearance:none;caret-color:var(--c0)}
-.f-input:focus{border-color:var(--c0);border-left-color:var(--c0);background:var(--bg4);box-shadow:0 0 0 1px rgba(0,255,157,.1) inset}
+.f-input:focus{border-color:var(--c0);border-left-color:var(--c0);background:var(--bg4);box-shadow:0 0 0 1px rgba(0,255,157,.15) inset,0 0 16px rgba(0,255,157,.08)}
 .f-input::placeholder{color:var(--txt3)}
 .f-ta{resize:none;line-height:1.65;min-height:90px}
 .char{font-size:10px;color:var(--txt3);text-align:right;margin-top:4px}
@@ -88,13 +88,13 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .trust-txt{font-size:11px;color:var(--txt2);flex:1;letter-spacing:.3px}
 .protocol-inline{margin:8px 0;padding:10px 14px;background:var(--bg3);border-left:2px solid var(--c0);border-radius:2px;font-size:11px;}
 .trust-lnk{font-size:10px;color:var(--c0);opacity:.5;cursor:pointer;text-decoration:underline;text-underline-offset:3px;white-space:nowrap;transition:opacity .15s;letter-spacing:.5px}
-.trust-lnk:hover{opacity:1}
+.trust-lnk:hover{opacity:1;text-shadow:0 0 8px rgba(0,255,157,.4)}
 
 /* SEND BUTTON */
 .btn-send{width:100%;padding:13px;background:transparent;border:1px solid var(--c0);color:var(--c0);font-family:var(--mono);font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .btn-send::before{content:'';position:absolute;inset:0;background:var(--c0);transform:translateX(-100%);transition:transform .2s;z-index:0}
 .btn-send:hover::before{transform:translateX(0)}
-.btn-send:hover{color:var(--bg);box-shadow:0 0 20px rgba(0,255,157,.3)}
+.btn-send:hover{color:var(--bg);box-shadow:0 0 24px rgba(0,255,157,.5),0 0 48px rgba(0,255,157,.2),inset 0 0 20px rgba(0,255,157,.1)}
 .btn-send span{position:relative;z-index:1}
 .btn-send:active{transform:scale(.99)}
 .btn-send:disabled{border-color:var(--dim);color:var(--txt3);cursor:not-allowed}
@@ -103,18 +103,18 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 /* INBOX BUTTON */
 .inbox-sect{padding:16px 22px;border-bottom:1px solid var(--dim);display:none}
 .btn-inbox{width:100%;padding:11px 14px;background:transparent;border:1px solid var(--dim);font-family:var(--mono);font-size:11px;color:var(--txt3);cursor:pointer;display:flex;justify-content:space-between;align-items:center;letter-spacing:1px;transition:all .15s}
-.btn-inbox:hover{border-color:var(--c1);color:var(--c1)}
+.btn-inbox:hover{border-color:var(--c1);color:var(--c1);box-shadow:0 0 12px rgba(0,184,255,.2);background:rgba(0,184,255,.04)}
 .inbox-badge{background:var(--c5);color:#fff;font-size:9px;padding:2px 7px;display:none;font-family:var(--mono);letter-spacing:1px}
 
 /* PROTOCOL FOOTER */
-.proto{padding:24px 22px 28px;margin-top:auto;border-top:1px solid var(--dim);display:flex;flex-direction:column;gap:20px}
+.proto{padding:24px 22px 28px;margin-top:auto;border-top:1px solid var(--dim);display:flex;flex-direction:column;gap:20px;text-align:center;align-items:center}
 .proto-block{display:flex;flex-direction:column;gap:6px}
 .proto-label{font-size:9px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px}
 .proto-txt{font-size:12px;color:var(--txt2);line-height:1.8;letter-spacing:.2px}
 .proto-txt b{color:var(--txt);font-weight:400}
 .proto-links{display:flex;gap:24px;flex-wrap:wrap}
 .proto-link{font-size:12px;color:var(--txt3);text-decoration:none;letter-spacing:.5px;transition:color .15s}
-.proto-link:hover{color:var(--c0)}
+.proto-link:hover{color:var(--c0);text-shadow:0 0 8px rgba(0,255,157,.3)}
 
 /* PROCESSING OVERLAY */
 .proc-ov{display:none;position:fixed;inset:0;background:rgba(2,8,5,.92);z-index:1500;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
@@ -148,7 +148,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .empty-icon{font-family:var(--display);font-size:48px;color:var(--dim);line-height:1}
 .msg-row{padding:14px 18px;border-bottom:1px solid var(--dim);cursor:pointer;transition:background .1s;position:relative}
 .msg-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--c1);opacity:0;transition:opacity .15s;box-shadow:0 0 6px var(--c1)}
-.msg-row:hover{background:rgba(0,184,255,.04)}
+.msg-row:hover{background:rgba(0,184,255,.06);box-shadow:inset 3px 0 0 var(--c1);transition:all .2s}
 .msg-row:hover::before{opacity:1}
 .msg-meta{display:flex;justify-content:space-between;margin-bottom:4px}
 .msg-from{font-size:10px;color:var(--c1);letter-spacing:1px}

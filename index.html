@@ -1749,10 +1749,12 @@ async function checkTier() {
       const data = await res.json();
       const newTier = data.tier || 0;
 
-      if (lastTier !== null && lastTier !== newTier) {
+      if (lastTier !== -1 && lastTier !== newTier) {
+        localStorage.setItem('tyst_tier', newTier);
         window.location.reload();
       }
       lastTier = newTier;
+      localStorage.setItem('tyst_tier', newTier);
     } catch(e) {}
   }
 

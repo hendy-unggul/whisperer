@@ -329,23 +329,32 @@
 </div>
 
 <script>
-const ADMIN_PASS = '***REMOVED***';
-const PB_EMAIL = 'nope.bukanguebanget@gmail.com';
-const PB_PASS = '***REMOVED***';
+const PB_EMAIL = '';
+const PB_PASS = '';
 const PB_URL = '/api/pb';
 let pbToken = null, tokenExp = 0, actLog = [];
 
-function doAuth() {
+async function doAuth() {
   const pin = document.getElementById('authPin').value;
-  if (pin === ADMIN_PASS) {
+  if (!pin) return;
+  try {
+    const r = await fetch('/api/admin-auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pin })
+    });
+    if (!r.ok) throw new Error('denied');
+    const d = await r.json();
+    pbToken = d.token;
+    tokenExp = Date.now() + 25 * 60 * 1000;
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     sessionStorage.setItem('tyst_adm', '1');
     init();
-  } else {
-    const e = document.getElementById('authErr');
-    e.style.display = 'block';
-    setTimeout(() => e.style.display = 'none', 2000);
+  } catch(e) {
+    const err = document.getElementById('authErr');
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 2000);
   }
 }
 

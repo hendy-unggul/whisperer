@@ -1207,14 +1207,21 @@ async function lmDoReg(){
     if(p!==p2){lmFb('lmFbR','e','PINs do not match');return;}
     const btn=document.getElementById('lmBtnR');btn.disabled=true;btn.textContent='Processing…';
     try{
-        const data=await LM.post('/profiles?select=id,username',{username:u});
-        const user=Array.isArray(data)?data[0]:data;if(!user||!user.id)throw new Error('No data returned');
         const h=await LM.hash(p,u);
+        const kp0=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveKey','deriveBits']);
+        const pub0=await crypto.subtle.exportKey('jwk',kp0.publicKey);
+        const priv0=await crypto.subtle.exportKey('jwk',kp0.privateKey);
+        delete pub0.d;
+        const regR=await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,auth_hash:h,pubkey:pub0})});
+        if(!regR.ok){const e=await regR.json();throw new Error(e.error||'Registration failed');}
+        const user=await regR.json();
+        localStorage.setItem('tyst_priv_v1_'+u,JSON.stringify(priv0));
+        localStorage.setItem('tyst_pub_v1_'+u,JSON.stringify(pub0));
+        sessionStorage.setItem('pk_reg','1');
         localStorage.setItem(LM.LS.u,user.username);localStorage.setItem(LM.LS.i,user.id);
         localStorage.setItem(LM.LS.l,'true');localStorage.setItem(LM.LS.a,h);
-        const ac=(document.getElementById('lmCode')&&document.getElementById('lmCode').value||'').trim().toUpperCase();let td={};if(ac){const cr=await fetch('/api/pb/api/collections/access_codes/records?filter=(code=%27'+encodeURIComponent(ac)+'%27%26%26status=%27pending%27)');const cj=await cr.json();const rec=cj.items&&cj.items[0];if(!rec){lmFb('lmFbR','e','Invalid or used code');btn.disabled=false;btn.innerHTML='<span>register →</span>';return;}if(new Date(rec.expires_at)<new Date()){lmFb('lmFbR','e','Code expired');btn.disabled=false;btn.innerHTML='<span>register →</span>';return;}td={tier:rec.tier,access_code:ac};}
-        await LM.patch('/profiles?id=eq.'+user.id,Object.assign({auth_hash:h},td));
-        try{const kp=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveKey','deriveBits']);const pub=await crypto.subtle.exportKey('jwk',kp.publicKey);const priv=await crypto.subtle.exportKey('jwk',kp.privateKey);delete pub.d;localStorage.setItem('tyst_priv_v1_'+u,JSON.stringify(priv));localStorage.setItem('tyst_pub_v1_'+u,JSON.stringify(pub));sessionStorage.setItem('pk_reg','1');await fetch('/api/pubkey',{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+h},body:JSON.stringify({username:u,pubkey:pub})});}catch(e){console.warn('pubkey reg failed',e);}
+        localStorage.setItem('tyst_tier',user.tier||0);
+        localStorage.setItem('tyst_created',user.created||new Date().toISOString());
         lmFb('lmFbR','s','Account created!');
         setTimeout(()=>{alert('Account created!\n\nUsername: '+user.username+'\n\nSave your PIN — it cannot be recovered.');window.location.reload();},800);
     }catch(err){

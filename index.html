@@ -1734,7 +1734,7 @@ if('serviceWorker' in navigator){
 // Auto-refresh tier status every 30s
 (function() {
   const CHECK_INTERVAL = 30000;
-  let lastTier = -1;
+  let lastTier = parseInt(localStorage.getItem('tyst_tier') || '-1');
 
 
 async function checkTier() {

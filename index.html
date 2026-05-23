@@ -416,7 +416,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <div class="field">
       <label class="f-label" for="tystTo">recipient</label>
       <input type="text" class="f-input" id="tystTo" placeholder="target.username"
-        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="tystValidate()" autofocus>
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="this.value=sanitizeUsername(this.value);tystValidate();" autofocus>
       <div id="tystToHint" style="font-size:10px;color:var(--txt3);margin-top:4px;opacity:0;transition:opacity .2s;letter-spacing:.5px">// format: word.word</div>
     </div>
     <div class="field">

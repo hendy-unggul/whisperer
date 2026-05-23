@@ -1254,22 +1254,18 @@ async function lmDoReg(){
 
 function showQR() {
   const panel = document.getElementById('qrPanel');
-  const usernameEl = document.getElementById('qrUsername');
   const canvas = document.getElementById('qrCanvas');
   if(!panel || !canvas) return;
-
   const username = localStorage.getItem('tyst_username') || '';
   if(!username) return;
-
-  // Close dropdown
   const dd = document.getElementById('sDD');
   if(dd) dd.classList.remove('show');
-
-  // URL to encode — app only, zero identity
-  const url = 'https://tyst.site/app';
-
-  // Draw QR using canvas
-  drawQRCanvas(canvas, url, 200);
+  canvas.innerHTML = '';
+  if(typeof QRCode !== 'undefined') {
+    try {
+      new QRCode(canvas, {text:'https://tyst.site',width:184,height:184,colorDark:'#040d0a',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+    } catch(e) { canvas.innerHTML = '<p style="color:#e53">QR error</p>'; }
+  } else { canvas.innerHTML = '<p style="color:#e53">QR not loaded</p>'; }
   panel.classList.add('show');
 }
 

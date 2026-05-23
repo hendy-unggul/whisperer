@@ -346,6 +346,7 @@ async function doAuth() {
     const d = await r.json();
     pbToken = d.token;
     tokenExp = Date.now() + 25 * 60 * 1000;
+    sessionStorage.setItem('tyst_adm_pw', pin);
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     sessionStorage.setItem('tyst_adm', '1');
@@ -380,7 +381,7 @@ function startClock() {
 
 async function getPBToken() {
   if (pbToken && Date.now() < tokenExp) return pbToken;
-  const pin = prompt('Session expired. Enter admin password:');
+  const pin = sessionStorage.getItem('tyst_adm_pw') || prompt('Session expired. Enter admin password:');
   if (!pin) throw new Error('Auth cancelled');
   const r = await fetch('/api/admin-auth', {
     method: 'POST',

@@ -559,7 +559,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
       <div id="lmLogin">
         <div class="lm-title">CONNECT</div>
         <label class="lm-label">username</label>
-        <input class="lm-input" id="lmU" placeholder="word.word" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="30">
+        <input class="lm-input" id="lmU" placeholder="word.word" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="30" oninput="this.value=sanitizeUsername(this.value);lmUpdateLogin();">
         <label class="lm-label">6-digit PIN</label>
         <input class="lm-input lm-pin" id="lmP" placeholder="&#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF;" autocomplete="off" maxlength="6" inputmode="numeric">
         <div class="lm-fb" id="lmFbL"></div>
@@ -570,7 +570,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
       <div id="lmReg" style="display:none">
         <div class="lm-title">REGISTER</div>
         <label class="lm-label">username — format <span style="color:var(--c1)">word.word</span></label>
-        <input class="lm-input" id="lmRU" placeholder="word.word" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="30">
+        <input class="lm-input" id="lmRU" placeholder="word.word" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="30" oninput="this.value=sanitizeUsername(this.value);lmUpdateReg();">
         <label class="lm-label">6-digit PIN</label>
         <input class="lm-input lm-pin" id="lmRP" placeholder="&#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF;" autocomplete="off" maxlength="6" inputmode="numeric">
         <label class="lm-label">confirm PIN</label>
@@ -1212,6 +1212,7 @@ function openLoginModal(){document.getElementById('lmBg').classList.add('show');
 function closeLM(){document.getElementById('lmBg').classList.remove('show');}
 function lmSwitch(to){document.getElementById('lmLogin').style.display=to==='login'?'':'none';document.getElementById('lmReg').style.display=to==='reg'?'':'none';setTimeout(()=>document.getElementById(to==='login'?'lmU':'lmRU').focus(),100);}
 function lmFb(id,type,msg){const el=document.getElementById(id);if(!el)return;if(!type){el.className='lm-fb';el.textContent='';return;}el.className='lm-fb show '+type;el.textContent=msg;}
+function sanitizeUsername(val){return val.toLowerCase().replace(/\s+/g,'.').replace(/[^a-z0-9.]/g,'.').replace(/\.{2,}/g,'.').replace(/^\.|\.$/, '');}
 function lmUpdateLogin(){const ok=LM.vu(document.getElementById('lmU').value)&&LM.vp(document.getElementById('lmP').value);document.getElementById('lmBtnL').disabled=!ok;}
 function lmUpdateReg(){const p=document.getElementById('lmRP').value,p2=document.getElementById('lmRP2').value;const ok=LM.vu(document.getElementById('lmRU').value)&&LM.vp(p)&&p===p2&&document.getElementById('lmAg').checked;document.getElementById('lmBtnR').disabled=!ok;}
 const _lf={a:0,l:0};

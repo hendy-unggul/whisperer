@@ -1742,11 +1742,12 @@ async function checkTier() {
     if (!username) return;
 
     try {
-      const res = await fetch('/api/pb/api/collections/profiles/records?filter=(username=%27'+encodeURIComponent(username)+'%27)');
+      const hash = localStorage.getItem('tyst_auth_v1');
+      if (!hash) return;
+      const res = await fetch('/api/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,hash})});
       if (!res.ok) return;
       const data = await res.json();
-      if (!data.items || !data.items.length) return;
-      const newTier = data.items[0].tier || 0;
+      const newTier = data.tier || 0;
 
       if (lastTier !== null && lastTier !== newTier) {
         window.location.reload();

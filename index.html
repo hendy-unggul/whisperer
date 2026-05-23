@@ -374,6 +374,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <div class="c-line"><span class="c-out3">[ OK ]</span> <span class="c-dim">anonymous relay configured · delay 2–47s</span></div>
     <div class="c-line"><span class="c-out5">[ OK ]</span> <span class="c-dim">self-destruct timer armed · ttl 5s post-read</span></div>
     <div class="c-line"><span class="c-prompt">tyst@node:~$</span> <span class="c-cmd">await input</span></div>
+    <div class="c-line" id="fpLine" style="display:none"><span class="c-out5">[ KEY ]</span> <span class="c-dim">pubkey fingerprint: <span id="fpVal" style="color:var(--c0);letter-spacing:1px"></span> · verify out-of-band</span></div>
   </div>
 
   <div class="console-toggle" id="consoleToggle" onclick="toggleConsole()">// hide ▲</div>
@@ -970,6 +971,18 @@ window.addEventListener('load',()=>{
         const _tl2=document.getElementById('tierLabel');if(_tl2){_tl2.textContent=_t>=2?'VAULT CHANNEL':_t>=1?'SECURE CHANNEL':'FREE CHANNEL';}
         showTrialBanner();
         ECDH.reg();INBOX.poll();
+        ECDH.getOrCreate().then(kp=>{
+          if(!kp||!kp.pub)return;
+          const raw=JSON.stringify(kp.pub);
+          crypto.subtle.digest('SHA-256',new TextEncoder().encode(raw)).then(buf=>{
+            const hex=Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+            const fp=hex.slice(0,8)+' '+hex.slice(8,16)+' '+hex.slice(16,24)+' '+hex.slice(24,32);
+            const el=document.getElementById('fpVal');
+            const line=document.getElementById('fpLine');
+            if(el)el.textContent=fp;
+            if(line)line.style.display='';
+          });
+        });
         if(_t>=1||isTrial()){const str=document.getElementById('senderTagRow');if(str)str.style.display='flex';}
         $('inboxBtn').onclick=()=>{INBOX.load();$('inboxPanel').classList.add('show');};
     }

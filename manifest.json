@@ -2,7 +2,7 @@
   "name": "TYST",
   "short_name": "TYST",
   "description": "Passing notes. Zero trace.",
-  "start_url": "/app",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#040d0a",
@@ -21,6 +21,10 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["productivity", "utilities"],
-  "lang": "en"
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
+  "lang": "en",
+  "scope": "/"
 }

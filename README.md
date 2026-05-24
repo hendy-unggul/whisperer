@@ -15,6 +15,8 @@ Send end-to-end encrypted notes to a username. Self-destructs 5 seconds after re
 - Key derivation: HKDF-SHA256 (info: whisper-v2)
 - Padding: 256-byte block boundary · random noise fill · 0xff sentinel
 - Private key: localStorage, device-only, never transmitted
+- Pubkey fingerprint: SHA-256 of public key, displayed at login for out-of-band verification
+- PIN hash: SHA-256(PIN:username:tyst_v1) — username-salted, no key stretching (v2 will add PBKDF2)
 
 
 ## Access model
@@ -37,6 +39,8 @@ To upgrade: send payment proof to tyst.pay via TYST, admin upgrades your tier di
 Community security review completed 2026-05-23. Areas reviewed: injection, mass assignment, collection rules, CORS, CSP, timing attack, race condition, credentials, padding, key fingerprint, username enumeration, ownership checks, rate limiting.
 
 Formal third-party audit (Cure53 / Trail of Bits) planned. Do not use for high-stakes communications until complete.
+
+**Known limitations:** PIN hashing uses SHA-256 without key stretching (PBKDF2/bcrypt planned for v2). Session tokens are not server-invalidatable — changing PIN from another device is the mitigation. Public key trust is TOFU — verify fingerprint out-of-band for high-stakes use.
 
 ## Asymmetric defense
 
@@ -85,7 +89,3 @@ Responsible disclosure: send findings to tyst.pay via TYST. We review all report
 - Decentralized relay (trust minimization)
 - Multi-recipient 1-to-1 broadcast
 - iOS / Android native PWA improvements
-
-## Security
-
-Responsible disclosure: send findings to tyst.pay via TYST. We review all reports. No formal bounty program yet — formal audit planned once resources allow.

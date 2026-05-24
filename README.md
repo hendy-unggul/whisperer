@@ -38,15 +38,21 @@ To upgrade: send payment proof to tyst.pay via TYST, admin upgrades your tier di
 
 Community security review completed 2026-05-23. Areas reviewed: injection, mass assignment, collection rules, CORS, CSP, timing attack, race condition, credentials, padding, key fingerprint, username enumeration, ownership checks, rate limiting.
 
-Formal third-party audit (Cure53 / Trail of Bits) planned. Do not use for high-stakes communications until complete.
+Formal third-party audit (Cure53 / Trail of Bits) planned. For highest-assurance use cases, combine TYST with Tor Browser via our onion address and verify pubkey fingerprints out-of-band.
 
 **Known limitations:** PIN hashing uses SHA-256 without key stretching (PBKDF2/bcrypt planned for v2). Session tokens are not server-invalidatable — changing PIN from another device is the mitigation. Public key trust is TOFU — verify fingerprint out-of-band for high-stakes use.
 
 ## Asymmetric defense
 
-- Mass surveillance: Impossible
-- Targeted attack: Expensive (blast radius = 1 message)
-- Legal coercion: Exhausting (Finland jurisdiction, data gone before process ends)
+TYST does not claim to be unbreakable. Breaking TYST costs more than the information is worth.
+
+**What the server technically cannot know:** message content (E2E encrypted on your device), sender identity (optional and unverified), recipient's private key. Even under legal compulsion, we cannot produce what we do not hold.
+
+- Mass surveillance: Impossible — E2E encryption, zero logs, ephemeral data
+- Targeted attack: Expensive — blast radius = 1 message, no session keys
+- Legal coercion: Exhausting — Finland jurisdiction, bilateral process 6-18 months, data destroyed before process ends
+- Without Tor: ISP/Hetzner sees you connected to tyst.site, not what you sent or to whom
+- With Tor: no party knows your IP, who you message, or that you use TYST
 
 ## Infrastructure
 

@@ -55,6 +55,7 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
 <div style="border:1px solid rgba(0,255,157,.25);border-left:3px solid var(--c0);padding:20px 24px;background:rgba(0,255,157,.02);margin-bottom:32px"><div style="color:var(--c0);font-size:10px;letter-spacing:2px;margin-bottom:16px">// ASYMMETRIC DEFENSE MODEL</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px"><div style="background:var(--bg2);padding:14px;border:1px solid var(--dim)"><div style="color:var(--c0);font-size:11px;margin-bottom:6px">MASS SURVEILLANCE</div><div style="color:var(--txt3);font-size:10px;line-height:1.9">Impossible. E2E encryption. Zero logs. Ephemeral data. No identity stored.</div></div><div style="background:var(--bg2);padding:14px;border:1px solid var(--dim)"><div style="color:var(--c2);font-size:11px;margin-bottom:6px">TARGETED ATTACK</div><div style="color:var(--txt3);font-size:10px;line-height:1.9">Expensive. Blast radius = 1 message. Stand-alone design. No session keys.</div></div><div style="background:var(--bg2);padding:14px;border:1px solid var(--dim)"><div style="color:var(--c5);font-size:11px;margin-bottom:6px">LEGAL COERCION</div><div style="color:var(--txt3);font-size:10px;line-height:1.9">Exhausting. Finland jurisdiction. Data gone before process ends. Nothing to produce.</div></div></div><div style="font-size:11px;color:var(--txt3);line-height:1.9">TYST does not claim to be unbreakable. Breaking TYST costs more than the information is worth. This is asymmetric defense — the same principle that makes smaller forces survive against larger adversaries.</div></div>  <div class="honest-box">
     <div class="honest-title">// honest disclaimer</div>
     <div class="honest-text">
+      <b>How is TYST different from WhatsApp disappearing messages?</b> WhatsApp knows your phone number, who you message, and when. Their servers hold your messages before delivery. Disappearing messages hide content from your screen — not from Meta's servers or legal requests. TYST holds only ciphertext it cannot decrypt, collects no identity, and operates under Finnish law outside US jurisdiction. There is nothing to produce to any authority.<br><br>
       No system is perfect. This document exists because we believe
       you deserve to know exactly what TYST can and cannot protect you from
       before you use it. If our limitations don't match your threat model,
@@ -209,7 +210,7 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
       <div class="table-row">
         <div class="cell">nation-state adversary</div>
         <div class="cell warn">weak</div>
-        <div class="cell">not designed for this threat level — use Briar + Tor</div>
+        <div class="cell">not designed for this threat level — use Tor Browser via our onion address for maximum anonymity</div>
       </div>
     </div>
   </div>
@@ -274,7 +275,7 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
     <div class="item">
       <span class="item-icon warn">✗</span>
       <div class="item-content">
-        <div class="item-desc">Whistleblowers facing nation-state adversaries — use Tor + Briar</div>
+        <div class="item-desc">Whistleblowers facing nation-state adversaries — use Tor Browser + TYST onion address for transport anonymity, or Briar for fully decentralized communication</div>
       </div>
     </div>
     <div class="item">

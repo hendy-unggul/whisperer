@@ -1,7 +1,7 @@
 // TYST Service Worker — minimal, privacy-first
 // No caching of sensitive content
 
-const CACHE = 'tyst-v3';
+const CACHE = 'tyst-v4';
 const STATIC = [
   '/index.html',
 ];

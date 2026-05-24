@@ -297,25 +297,25 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
     <div class="item">
       <span class="item-icon ok">→</span>
       <div class="item-content">
-        <div class="item-desc">People who want anonymous messaging without registering a phone number or email</div>
+        <div class="item-desc">Lawyers communicating with clients — no server-side record, nothing to produce under subpoena, no identity collected</div>
       </div>
     </div>
     <div class="item">
       <span class="item-icon ok">→</span>
       <div class="item-content">
-        <div class="item-desc">Messages that should not exist after being read</div>
+        <div class="item-desc">Journalists communicating with sources — sender identity unknown to server, message destroyed before legal process completes</div>
       </div>
     </div>
     <div class="item">
       <span class="item-icon ok">→</span>
       <div class="item-content">
-        <div class="item-desc">Sending sensitive information to someone without leaving a server-side record</div>
+        <div class="item-desc">Business decisions requiring confidentiality — no phone number, no email, no contact graph stored</div>
       </div>
     </div>
     <div class="item">
       <span class="item-icon ok">→</span>
       <div class="item-content">
-        <div class="item-desc">Users who want reasonable privacy, not nation-state level protection</div>
+        <div class="item-desc">Anyone who needs messages that technically cannot be retrieved, forwarded to authorities, or linked to their identity</div>
       </div>
     </div>
   </div>
@@ -325,25 +325,19 @@ h1{font-size:26px;color:var(--c0);letter-spacing:4px;margin-bottom:6px;text-shad
     <div class="item">
       <span class="item-icon warn">✗</span>
       <div class="item-content">
-        <div class="item-desc">Journalists communicating with sources in hostile jurisdictions — use SecureDrop</div>
+        <div class="item-desc">Journalists facing nation-state adversaries (NSA, FSB, MSS level) — use SecureDrop for document transfer. TYST + Tor onion serves as secondary coordination channel.</div>
       </div>
     </div>
     <div class="item">
       <span class="item-icon warn">✗</span>
       <div class="item-content">
-        <div class="item-desc">Whistleblowers facing nation-state adversaries — use Tor Browser + TYST onion address for transport anonymity, or Briar for fully decentralized communication</div>
+        <div class="item-desc">Anyone whose device is already compromised — TYST secures the server side, not the device. A compromised device defeats all messaging tools equally.</div>
       </div>
     </div>
     <div class="item">
       <span class="item-icon warn">✗</span>
       <div class="item-content">
-        <div class="item-desc">Anyone whose device may be compromised or monitored</div>
-      </div>
-    </div>
-    <div class="item">
-      <span class="item-icon warn">✗</span>
-      <div class="item-content">
-        <div class="item-desc">High-stakes communications requiring formally audited cryptography</div>
+        <div class="item-desc">Communications requiring formally audited cryptography — community audit completed, third-party audit (Cure53 / Trail of Bits) planned but not yet complete.</div>
       </div>
     </div>
   </div>
